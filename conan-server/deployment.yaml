@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conan-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conan-server
+  template:
+    metadata:
+      labels:
+        app: conan-server
+    spec:
+      containers:
+      - name: conan-server
+        image: conanio/conan_server:1.28.1
+        env:
+        - name: CONAN_SERVER_PORT
+          value: "9300"
+      initContainers:
+      - name: init-conan-server
+        image: busybox:1.28
+        command: ['sh', '-c', "echo hello"]
