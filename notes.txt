@@ -7,10 +7,6 @@ for each repo:
   for reach remote branch:
     if branch matches a channel:
       create a commit (if it does not exist)
-      for each profile:
-        create a build
-        
-        remove old builds if applicable (TBD)
 
 commit
 ------
@@ -43,8 +39,9 @@ Scheduler
 =========
 
 on new commit:
-  for each new build:
-    try to schedule the build
+  for each profile:
+    create a build
+    try to schedule the build 
     
 on new package:
   for each failed build with missing dependencies:
