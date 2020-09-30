@@ -25,6 +25,13 @@ spec:
         backend:
           serviceName: crawler
           servicePort: 8080
+  - host: scheduler.conan-ci
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: scheduler
+          servicePort: 8080
   - host: phpmyadmin.conan-ci
     http:
       paths:

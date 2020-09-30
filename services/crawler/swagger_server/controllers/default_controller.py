@@ -2,7 +2,7 @@ import connexion
 import six
 
 from swagger_server import util
-from swagger_server.crawler import process
+from swagger_server import crawler
 
 
 def process_repos():  # noqa: E501
@@ -14,5 +14,5 @@ def process_repos():  # noqa: E501
     :rtype: None
     """
 
-    process.trigger()
+    crawler.run()
     return 'success'

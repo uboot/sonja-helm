@@ -52,7 +52,7 @@ class RepoController(object):
         return repo.head.commit.hexsha
 
 
-def trigger():
+def run():
     logger.info("start crawling")
 
     if not os.path.exists(data_dir):
@@ -98,6 +98,7 @@ def trigger():
                 old_commits = database.Commit.query.filter(
                     database.Commit.repo == repo,
                     database.Commit.channel == channel,
+                    database.Commit.sha != sha,
                     database.Commit.status != database.CommitStatus.old
                 )
                 for c in old_commits:
