@@ -65,29 +65,42 @@ def trigger():
         repo_dir = os.path.join(data_dir, str(repo.id))
         controller = RepoController(repo_dir)
         if not controller.is_clone_of(repo.url):
+            logger.info("clone URL '%s' to '%s'", repo.url, repo_dir)
             controller.create_new_clone(repo.url)
-            logger.info("cloned URL '%s' to '%s'", repo.url, repo_dir)
         else:
-            controller.fetch()
             logger.info("fetch existing repo '%s' for URL '%s'",
                         repo_dir, repo.url)
+            controller.fetch()
 
         branches = controller.get_remote_branches()
         for channel in channels:
             if channel.branch in branches:
-                controller.checkout(channel.branch)
                 logger.info("checkout branch '%s'", channel.branch)
+                controller.checkout(channel.branch)
                 sha = controller.get_sha()
 
                 commits = database.Commit.query.filter_by(repo=repo, sha=sha,
                                                           channel=channel)
-                if not list(commits):
-                    commit = database.Commit()
-                    commit.sha = sha
-                    commit.repo = repo
-                    commit.channel = channel
-                    commit.status = database.CommitStatus.new
-                    db.session.add(commit)
-                    db.session.commit()
 
+                # continue if this commit has already been stored
+                if list(commits):
+                    logger.info("commit '%s' exists", sha[:7])
+                    continue
 
+                logger.info("add commit '%s'", sha[:7])
+                commit = database.Commit()
+                commit.sha = sha
+                commit.repo = repo
+                commit.channel = channel
+                commit.status = database.CommitStatus.new
+                db.session.add(commit)
+
+                old_commits = database.Commit.query.filter(
+                    database.Commit.repo == repo,
+                    database.Commit.channel == channel,
+                    database.Commit.status != database.CommitStatus.old
+                )
+                for c in old_commits:
+                    logger.info("set status of '%s' to 'old'", c.sha[:7])
+                    c.status = database.CommitStatus.old
+                db.session.commit()
