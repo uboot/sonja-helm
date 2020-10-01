@@ -52,7 +52,7 @@ class RepoController(object):
         return repo.head.commit.hexsha
 
 
-def run():
+def process_repos():
     logger.info("start crawling")
 
     if not os.path.exists(data_dir):
@@ -105,3 +105,5 @@ def run():
                     logger.info("set status of '%s' to 'old'", c.sha[:7])
                     c.status = database.CommitStatus.old
                 db.session.commit()
+
+    logger.info("finish crawling")

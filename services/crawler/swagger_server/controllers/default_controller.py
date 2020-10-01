@@ -13,6 +13,5 @@ def process_repos():  # noqa: E501
 
     :rtype: None
     """
-
-    crawler.run()
+    crawler.process_repos()
     return 'success'

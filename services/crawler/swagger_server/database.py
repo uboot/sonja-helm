@@ -72,6 +72,9 @@ missing = db.Table('missing',
 class Build(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.Enum(BuildStatus))
+    commit_id = db.Column(db.Integer, db.ForeignKey('commit.id'),
+                          nullable=False)
+    commit = db.relationship('Commit', backref='builds')
     package_id = db.Column(db.Integer, db.ForeignKey('package.id'))
     package = db.relationship("Package", backref="builds")
     profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'), nullable=False)
