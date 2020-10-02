@@ -10,6 +10,7 @@ def process_commits():
     commits = database.Commit.query.filter_by(status=database.CommitStatus.new)
     profiles = database.Profile.query.all()
     for commit in commits:
+        logger.info("process commit '%s' of repo '%s'", commit.sha[:7], commit.repo.url)
         for profile in profiles:
             logger.info("schedule build for '%s' with profile '%s'", commit.sha[:7], profile.name)
             build = database.Build()

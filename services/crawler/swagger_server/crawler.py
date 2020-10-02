@@ -59,6 +59,7 @@ def process_repos():
         os.makedirs(data_dir, exist_ok=True)
         logger.info("created directory '%s'", data_dir)
 
+    new_commits = False
     repos = database.Repo.query.all()
     channels = database.Channel.query.all()
     for repo in repos:
@@ -94,6 +95,7 @@ def process_repos():
                 commit.channel = channel
                 commit.status = database.CommitStatus.new
                 db.session.add(commit)
+                new_commits = True
 
                 old_commits = database.Commit.query.filter(
                     database.Commit.repo == repo,
@@ -106,4 +108,9 @@ def process_repos():
                     c.status = database.CommitStatus.old
                 db.session.commit()
 
-    logger.info("finish crawling")
+    if new_commits:
+        logger.info("finish crawling with *new* commits")
+    else:
+        logger.info("finish crawling with *no* new commits")
+
+    return new_commits
