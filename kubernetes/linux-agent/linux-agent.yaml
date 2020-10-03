@@ -1,11 +1,37 @@
+kind: Service
 apiVersion: v1
-kind: Pod
 metadata:
-  name: agent
+  name: linux-agent
 spec:
-  containers:
-    - name:  linux-agent
-      image: linux-agent:local
-      imagePullPolicy: Never
-      securityContext:
-        privileged: true
+  selector:
+    app: linux-agent
+  ports:
+    - port: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linux-agent
+  labels:
+    app: linux-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linux-agent
+  template:
+    metadata:
+      labels:
+        app: linux-agent
+    spec:
+      containers:
+      - name:  linux-agent
+        image: linux-agent:local
+        imagePullPolicy: Never
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: mysql-password 
+

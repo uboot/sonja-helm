@@ -5,24 +5,20 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.build import Build  # noqa: E501
 from swagger_server.test import BaseTestCase
 
 
 class TestDefaultController(BaseTestCase):
     """DefaultController integration test stubs"""
 
-    def test_schedule_build(self):
-        """Test case for schedule_build
+    def test_process_builds(self):
+        """Test case for process_builds
 
-        schedule a build
+        Process new builds
         """
-        body = Build()
         response = self.client.open(
-            '/build',
-            method='POST',
-            data=json.dumps(body),
-            content_type='application/json')
+            '/process-builds',
+            method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
