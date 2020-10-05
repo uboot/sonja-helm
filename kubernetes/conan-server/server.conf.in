@@ -56,11 +56,11 @@ updown_secret: ifuJNDlyZRjSDBFPlQsWojcO
 #   internal/*@*/*: ?
 #   */*@*/*: *
 #
-# By default all users can read all blocks
+# By default all users can ead all blocks
 #
 [read_permissions]
 */*@*/*: *
 
 [users]
 #default_user: defaultpass
-demo: demo
+agent: SECRET
