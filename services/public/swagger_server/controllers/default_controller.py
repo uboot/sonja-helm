@@ -2,8 +2,8 @@ import connexion
 import six
 
 from flask import abort
-from swagger_server.config import db
-from swagger_server import database
+from conanci import database
+from conanci.config import db
 from swagger_server.models.channel import Channel  # noqa: E501
 from swagger_server.models.profile import Profile  # noqa: E501
 from swagger_server.models.setting import Setting  # noqa: E501
@@ -156,3 +156,15 @@ def get_repos():  # noqa: E501
     :rtype: List[Repo]
     """
     return [Repo(r.id, r.url, r.path) for r in database.Repo.query.all()]
+
+
+def populate_database():  # noqa: E501
+    """Populate the database with sample data
+
+     # noqa: E501
+
+
+    :rtype: None
+    """
+    database.populate_database()
+    return 'success'

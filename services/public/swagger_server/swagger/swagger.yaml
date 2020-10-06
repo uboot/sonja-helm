@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Conan-CI Public API
+  title: Conan-CI Public
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -188,6 +188,14 @@ paths:
         "404":
           description: channel not found
       x-openapi-router-controller: swagger_server.controllers.default_controller
+  /populate-database:
+    get:
+      summary: Populate the database with sample data
+      operationId: populate_database
+      responses:
+        "200":
+          description: success
+      x-openapi-router-controller: swagger_server.controllers.default_controller
 components:
   schemas:
     Repo:
@@ -273,4 +281,16 @@ components:
         name: stable
         id: 1
         branch: master
+    Commit:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        sha:
+          type: string
+          example: 2777a37dc82e296d55c23f738b79f139e627920c
+        repo:
+          $ref: '#/components/schemas/Repo'
 

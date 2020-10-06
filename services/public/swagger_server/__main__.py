@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
-from swagger_server.config import app, db
+from conanci.config import app, db
 from swagger_server import encoder
+import os.path
+
+swagger_api = os.path.join(os.path.dirname(__file__), 'swagger', 'swagger.yaml')
+
 
 def main():
-    app.add_api('swagger.yaml', arguments={'title': 'Conan-CI Public API'}, pythonic_params=True)
+    app.add_api(swagger_api, arguments={'title': 'Conan CI Linux Agent'}, pythonic_params=True)
     app.app.json_encoder = encoder.JSONEncoder
     db.create_all()
     app.run(port=8080)

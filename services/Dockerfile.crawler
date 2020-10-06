@@ -1,6 +1,7 @@
 FROM alpine:3.12
 
 RUN apk add --no-cache \
+		git \
 		py3-pip \
 		py3-wheel \
 		py3-mysqlclient
@@ -12,7 +13,8 @@ COPY requirements.txt /usr/src/app/
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY . /usr/src/app
+COPY crawler /usr/src/app
+COPY conanci /usr/src/app/conanci
 
 EXPOSE 8080
 

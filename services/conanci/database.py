@@ -1,4 +1,4 @@
-from swagger_server.config import db
+from conanci.config import db
 import enum
 
 
@@ -97,3 +97,34 @@ class Pattern(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     version = db.Column(db.String(255), nullable=False)
+
+
+def populate_database():
+    repo = Repo()
+    repo.url = "https://github.com/uboot/conan-ci.git"
+    repo.path = "packages/hello"
+    db.session.add(repo)
+
+    profile = Profile()
+    profile.name = "GCC 9"
+    profile.container = "conanio/gcc9"
+    profile.settings = [Setting("build_type", "Release")]
+    db.session.add(profile)
+
+    channel = Channel()
+    channel.branch = "master"
+    channel.name = "stable"
+    db.session.add(channel)
+
+    # commit = Commit()
+    # commit.repo = repo
+    # commit.sha = "2777a37dc82e296d55c23f738b79f139e627920c"
+    # commit.channel = channel
+    # commit.status = CommitStatus.new
+    # build = Build()
+    # build.commit = commit
+    # build.profile = profile
+    # build.status = BuildStatus.new
+    # db.session.add(build)
+    
+    db.session.commit()

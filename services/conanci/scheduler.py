@@ -1,5 +1,5 @@
-from swagger_server.config import app, db
-from swagger_server import database
+from conanci.config import app, db
+from conanci import database
 
 logger = app.app.logger
 
