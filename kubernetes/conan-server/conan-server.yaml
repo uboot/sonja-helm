@@ -36,16 +36,12 @@ spec:
         - name: CONAN_SERVER_PORT
           value: "9300"
       initContainers:
-      - name: download-server-setup
-        image: busybox:1.28
-        command: ['wget', '-P', '/config', 'https://raw.githubusercontent.com/uboot/conan-ci/master/kubernetes/conan-server/setup_server_config.sh']
-        volumeMounts:
-        - name: server-config
-          mountPath: /config
       - name: setup-server
         image: busybox:1.28
-        command: ['sh', '/config/setup_server_config.sh']
+        command: ['sh', '/config-tools/setup_server_config.sh']
         volumeMounts:
+        - name: server-config-tools
+          mountPath: /config-tools
         - name: server-config
           mountPath: /config
         env:
@@ -69,6 +65,9 @@ spec:
       volumes:
       - name: server-config
         emptyDir: {}
+      - name: server-config-tools
+        configMap:
+          name: conan-server-configmap
   volumeClaimTemplates:
   - metadata:
       name: conan-server-storage
