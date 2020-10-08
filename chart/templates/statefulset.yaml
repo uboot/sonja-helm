@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet 
+metadata:
+  name: conan-server
+spec:
+  serviceName: conan-server
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conan-server
+  template:
+    metadata:
+      labels:
+        app: conan-server
+    spec:
+      containers:
+      - name: conan-server
+        image: conanio/conan_server:1.28.1
+        volumeMounts:
+        - name: server-config
+          mountPath: /root/.conan_server
+        - name: conan-server-storage
+          mountPath: /data
+        env:
+        # For some reason the environment variable is set to a wrong value. Here we overwrite it.
+        - name: CONAN_SERVER_PORT
+          value: "9300"
+      initContainers:
+      - name: setup-server
+        image: busybox:1.28
+        command: ['cp', '/config-map/server.conf', '/config']
+        volumeMounts:
+        - name: server-config-map
+          mountPath: /config-map
+        - name: server-config
+          mountPath: /config
+      - name: migrate-conan-data
+        image: conanio/conan_server:1.28.1
+        command: ['python', '-m', 'conans.conan_server', '--migrate']
+        volumeMounts:
+        - name: server-config
+          mountPath: /root/.conan_server
+        - name: conan-server-storage
+          mountPath: /data
+        env:
+        # For some reason the environment variable is set to a wrong value. Here we overwrite it.
+        - name: CONAN_SERVER_PORT
+          value: "9300"
+      volumes:
+      - name: server-config
+        emptyDir: {}
+      - name: server-config-map
+        configMap:
+          name: {{ template "conan-ci.name" . }}-conan-server
+  volumeClaimTemplates:
+  - metadata:
+      name: conan-server-storage
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100M

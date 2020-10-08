@@ -1,0 +1,14 @@
+# Default values for conan-ci.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+host: conan-ci
+conanPassword: demo
+
+mysql:
+  mysqlRootPassword: secret
+  mysqlDatabase: conan-ci
+
+phpmyadmin:
+  db:
+    chartName: mysql

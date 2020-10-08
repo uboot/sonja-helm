@@ -1,0 +1,49 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "conan-ci.fullname" . }}-public
+spec:
+  selector:
+    app: public
+  ports:
+    - port: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "conan-ci.fullname" . }}-scheduler
+spec:
+  selector:
+    app: scheduler
+  ports:
+    - port: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "conan-ci.fullname" . }}-crawler
+spec:
+  selector:
+    app: crawler
+  ports:
+    - port: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "conan-ci.fullname" . }}-linux-agent
+spec:
+  selector:
+    app: linux-agent
+  ports:
+    - port: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "conan-ci.fullname" . }}-conan-server
+spec:
+  selector:
+    app: conan-server
+  ports:
+    - port: 9300
