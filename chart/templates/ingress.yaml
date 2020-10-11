@@ -11,20 +11,17 @@ spec:
         backend:
           serviceName: {{ template "conan-ci.fullname" . }}-conan-server
           servicePort: 9300
-  - host: public.{{ .Values.host }}
+{{- range .Values.services }}
+{{- if .public }}
+  - host: {{ .name }}.{{ $.Values.host }}
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ template "conan-ci.fullname" . }}-public
+          serviceName: {{ template "conan-ci.fullname" $ }}-{{ .name }}
           servicePort: 8080
-  - host: crawler.{{ .Values.host }}
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{ template "conan-ci.fullname" . }}-crawler
-          servicePort: 8080
+{{- end }}
+{{- end }}
   - host: phpmyadmin.{{ .Values.host }}
     http:
       paths:

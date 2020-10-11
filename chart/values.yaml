@@ -12,3 +12,12 @@ mysql:
 phpmyadmin:
   db:
     chartName: mysql
+
+services:
+  - name: public
+    public: true
+  - name: scheduler
+  - name: crawler
+    public: true
+  - name: linux-agent
+    replicas: 1
