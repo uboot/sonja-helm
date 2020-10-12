@@ -8,6 +8,16 @@ from swagger_server import util
 logger = app.app.logger
 
 
+def ping():  # noqa: E501
+    """ping the service
+
+     # noqa: E501
+
+
+    :rtype: None
+    """
+    return 'success'
+
 def process_builds():  # noqa: E501
     """Process new builds
 

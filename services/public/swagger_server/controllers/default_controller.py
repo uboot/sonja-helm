@@ -10,6 +10,17 @@ from swagger_server.models.setting import Setting  # noqa: E501
 from swagger_server.models.repo import Repo  # noqa: E501
 from swagger_server import util
 
+
+def ping():  # noqa: E501
+    """ping the service
+
+     # noqa: E501
+
+
+    :rtype: None
+    """
+    return 'success'
+
 def add_channel(body=None):  # noqa: E501
     """add a new channel
 

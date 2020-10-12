@@ -10,6 +10,16 @@ logger = app.app.logger
 linux_agent = swagger_client.DefaultApi(swagger_client.ApiClient(None))
 
 
+def ping():  # noqa: E501
+    """ping the service
+
+     # noqa: E501
+
+
+    :rtype: None
+    """
+    return 'success'
+
 def process_commits():  # noqa: E501
     """Process new commits
 

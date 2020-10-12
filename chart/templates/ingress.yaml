@@ -9,7 +9,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ template "conan-ci.fullname" . }}-conan-server
+          serviceName: {{ .Release.Name }}-conan-server
           servicePort: 9300
 {{- range .Values.services }}
 {{- if .public }}

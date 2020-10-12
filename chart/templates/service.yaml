@@ -5,7 +5,7 @@ metadata:
   name: {{ template "conan-ci.fullname" $ }}-{{ .name }}
 spec:
   selector:
-    app: {{ .name }}
+    app: {{ template "conan-ci.fullname" $ }}-{{ .name }}
   ports:
     - port: 8080
 ---

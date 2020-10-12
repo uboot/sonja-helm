@@ -8,6 +8,14 @@ info:
 servers:
 - url: /
 paths:
+  /ping:
+    get:
+      summary: ping the service
+      operationId: ping
+      responses:
+        "200":
+          description: success
+      x-openapi-router-controller: swagger_server.controllers.default_controller
   /process-repos:
     get:
       summary: scan repos for new commits

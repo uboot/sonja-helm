@@ -2,27 +2,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .name }}
+  name: {{ template "conan-ci.fullname" $ }}-{{ .name }}
   labels:
-    app: {{ .name }}
+    app: {{ template "conan-ci.fullname" $ }}-{{ .name }}
 spec:
   replicas: {{ .replicas | default 1 }}
   selector:
     matchLabels:
-      app: {{ .name }}
+      app: {{ template "conan-ci.fullname" $ }}-{{ .name }}
   template:
     metadata:
       labels:
-        app: {{ .name }}
+        app: {{ template "conan-ci.fullname" $ }}-{{ .name }}
     spec:
       containers:
       - name:  {{ .name }}
         image: {{ .name }}:local
         imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
         env:
         - name: MYSQL_URL
           value: {{ $.Release.Name }}-mysql
         - name: MYSQL_ROOT_PASSWORD
           value: {{ $.Values.mysql.mysqlRootPassword }}
+        - name: CONANCI_SCHEDULER_URL
+          value: {{ template "conan-ci.fullname" $ }}-scheduler
+        - name: CONANCI_LINUXAGENT_URL
+          value: {{ template "conan-ci.fullname" $ }}-linux-agent
 ---
 {{- end }}

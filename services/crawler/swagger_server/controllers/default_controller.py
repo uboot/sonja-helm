@@ -10,6 +10,16 @@ logger = app.app.logger
 scheduler = swagger_client.DefaultApi(swagger_client.ApiClient(None))
 
 
+def ping():  # noqa: E501
+    """ping the service
+
+     # noqa: E501
+
+
+    :rtype: None
+    """
+    return 'success'
+
 def process_repos():  # noqa: E501
     """scan repos for new commits
 
