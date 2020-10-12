@@ -1,60 +1,66 @@
 apiVersion: apps/v1
 kind: StatefulSet 
 metadata:
-  name: conan-server
+  name: {{ include "conan-server.fullname" . }}
+  labels:
+    {{- include "conan-server.labels" . | nindent 4 }}
 spec:
-  serviceName: conan-server
+  serviceName: {{ include "conan-server.fullname" . }}
   replicas: 1
   selector:
     matchLabels:
-      app: conan-server
+      {{- include "conan-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: conan-server
+        {{- include "conan-server.labels" . | nindent 8 }}
     spec:
       containers:
-      - name: conan-server
-        image: conanio/conan_server:1.28.1
+      - name: {{ .Chart.Name }}
+        image: "conanio/conan_server:{{ .Values.tag | default "1.28.1" }}"
         volumeMounts:
-        - name: server-config
+        - name: {{ .Chart.Name }}-config
           mountPath: /root/.conan_server
-        - name: conan-server-storage
+        - name: {{ .Chart.Name }}-storage
           mountPath: /data
         env:
         # For some reason the environment variable is set to a wrong value. Here we overwrite it.
         - name: CONAN_SERVER_PORT
           value: "9300"
+        livenessProbe:
+          httpGet:
+            path: /v2/ping
+            port: 9300
       initContainers:
-      - name: setup-server
+      - name: {{ .Chart.Name }}-setup
         image: busybox:1.28
         command: ['cp', '/config-map/server.conf', '/config']
         volumeMounts:
-        - name: server-config-map
+        - name: {{ .Chart.Name }}-config-map
           mountPath: /config-map
-        - name: server-config
+        - name: {{ .Chart.Name }}-config
           mountPath: /config
-      - name: migrate-conan-data
+      - name: {{ .Chart.Name }}-migrate-data
         image: conanio/conan_server:1.28.1
         command: ['python', '-m', 'conans.conan_server', '--migrate']
         volumeMounts:
-        - name: server-config
+        - name: {{ .Chart.Name }}-config
           mountPath: /root/.conan_server
-        - name: conan-server-storage
+        - name: {{ .Chart.Name }}-storage
           mountPath: /data
         env:
         # For some reason the environment variable is set to a wrong value. Here we overwrite it.
         - name: CONAN_SERVER_PORT
           value: "9300"
       volumes:
-      - name: server-config
+      - name: {{ .Chart.Name }}-config
         emptyDir: {}
-      - name: server-config-map
+      - name: {{ .Chart.Name }}-config-map
         configMap:
-          name: {{ template "conan-ci.name" . }}-conan-server
+          name: {{ include "conan-server.fullname" . }}
   volumeClaimTemplates:
   - metadata:
-      name: conan-server-storage
+      name: {{ .Chart.Name }}-storage
     spec:
       accessModes:
       - ReadWriteOnce

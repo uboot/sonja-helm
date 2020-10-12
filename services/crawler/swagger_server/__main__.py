@@ -10,8 +10,7 @@ swagger_api = os.path.join(os.path.dirname(__file__), 'swagger', 'swagger.yaml')
 def main():
     app.add_api(swagger_api, arguments={'title': 'Conan CI Crawler'}, pythonic_params=True)
     app.app.json_encoder = encoder.JSONEncoder
-    if not connect_to_database():
-        exit(1)
+    connect_to_database()
     app.run(port=8080)
 
 if __name__ == '__main__':

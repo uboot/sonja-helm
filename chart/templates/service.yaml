@@ -10,12 +10,3 @@ spec:
     - port: 8080
 ---
 {{- end }}
-kind: Service
-apiVersion: v1
-metadata:
-  name: {{ template "conan-ci.fullname" . }}-conan-server
-spec:
-  selector:
-    app: conan-server
-  ports:
-    - port: 9300

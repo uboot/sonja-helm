@@ -3,7 +3,9 @@
 # Declare variables to be passed into your templates.
 
 host: conan-ci
-conanPassword: demo
+
+conan-server:
+  conanPassword: demo
 
 mysql:
   mysqlRootPassword: secret
