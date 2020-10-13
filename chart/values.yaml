@@ -8,6 +8,7 @@ conan-server:
   conanPassword: demo
 
 mysql:
+  imageTag: 8.0.21
   mysqlRootPassword: secret
   mysqlDatabase: conan-ci
 

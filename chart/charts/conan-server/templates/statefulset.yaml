@@ -19,9 +19,9 @@ spec:
       - name: {{ .Chart.Name }}
         image: "conanio/conan_server:{{ .Values.tag | default "1.28.1" }}"
         volumeMounts:
-        - name: {{ .Chart.Name }}-config
+        - name: config
           mountPath: /root/.conan_server
-        - name: {{ .Chart.Name }}-storage
+        - name: storage
           mountPath: /data
         env:
         # For some reason the environment variable is set to a wrong value. Here we overwrite it.
@@ -36,31 +36,31 @@ spec:
         image: busybox:1.28
         command: ['cp', '/config-map/server.conf', '/config']
         volumeMounts:
-        - name: {{ .Chart.Name }}-config-map
+        - name: config-map
           mountPath: /config-map
-        - name: {{ .Chart.Name }}-config
+        - name: config
           mountPath: /config
       - name: {{ .Chart.Name }}-migrate-data
         image: conanio/conan_server:1.28.1
         command: ['python', '-m', 'conans.conan_server', '--migrate']
         volumeMounts:
-        - name: {{ .Chart.Name }}-config
+        - name: config
           mountPath: /root/.conan_server
-        - name: {{ .Chart.Name }}-storage
+        - name: storage
           mountPath: /data
         env:
         # For some reason the environment variable is set to a wrong value. Here we overwrite it.
         - name: CONAN_SERVER_PORT
           value: "9300"
       volumes:
-      - name: {{ .Chart.Name }}-config
+      - name: config
         emptyDir: {}
-      - name: {{ .Chart.Name }}-config-map
+      - name: config-map
         configMap:
           name: {{ include "conan-server.fullname" . }}
   volumeClaimTemplates:
   - metadata:
-      name: {{ .Chart.Name }}-storage
+      name: storage
     spec:
       accessModes:
       - ReadWriteOnce

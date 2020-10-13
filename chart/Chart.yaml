@@ -27,5 +27,5 @@ dependencies:
   version: "1.6.7"
   repository: "https://kubernetes-charts.storage.googleapis.com"
 - name: phpmyadmin
-  version: "6.5.2"
+  version: "6.5.3"
   repository: "https://charts.bitnami.com/bitnami"
