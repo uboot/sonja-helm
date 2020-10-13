@@ -4,3 +4,5 @@
 
 conanPassword: demo
 tag: 1.28.1
+persistence:
+  size: 100M
