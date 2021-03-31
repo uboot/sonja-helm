@@ -27,5 +27,5 @@ spec:
       volumes:
       - name: windows-server
         containerDisk:
-          image: localhost:5000/windows20h2:local
+          image: localhost:5000/windows20h2:latest
           # image: kubevirt/cirros-container-disk-demo
