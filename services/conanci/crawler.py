@@ -78,6 +78,21 @@ class RepoController(object):
         first_line = message.splitlines()[0]
         return first_line[:255] if len(first_line) > 255 else first_line
 
+    def get_user_name(self):
+        repo = git.Repo(self.repo_dir)
+        name = repo.head.commit.author.name
+        if not len(name):
+            return ''
+        return name[:255] if len(name) > 255 else name
+
+    def get_user_email(self):
+        repo = git.Repo(self.repo_dir)
+        email = repo.head.commit.author.email
+        if not len(email):
+            return ''
+        return email[:255] if len(email) > 255 else email
+
+
 
 class Crawler(Worker):
     def __init__(self, scheduler):
@@ -123,7 +138,6 @@ class Crawler(Worker):
                             logger.info("Checkout branch '%s'", channel.branch)
                             controller.checkout(channel.branch)
                             sha = controller.get_sha()
-                            message = controller.get_message()
 
                             commits = session.query(database.Commit).filter_by(repo=repo,
                                 sha=sha, channel=channel)
@@ -136,7 +150,9 @@ class Crawler(Worker):
                             logger.info("Add commit '%s'", sha[:7])
                             commit = database.Commit()
                             commit.sha = sha
-                            commit.message = message
+                            commit.message = controller.get_message()
+                            commit.user_name = controller.get_user_name()
+                            commit.user_email = controller.get_user_email()
                             commit.repo = repo
                             commit.channel = channel
                             commit.status = database.CommitStatus.new
