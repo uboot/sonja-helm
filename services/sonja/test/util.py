@@ -10,14 +10,11 @@ def create_user(parameters):
     user.first_name = "Joe"
     user.last_name = "Doe"
     user.password = hash_password("password")
-    admin = database.Permission()
-    admin.label = database.PermissionLabel.admin
+    admin = database.Permission(database.PermissionLabel.admin)
     user.permissions.append(admin)
-    write = database.Permission()
-    write.label = database.PermissionLabel.write
+    write = database.Permission(database.PermissionLabel.write)
     user.permissions.append(write)
-    read = database.Permission()
-    read.label = database.PermissionLabel.read
+    read = database.Permission(database.PermissionLabel.read)
     user.permissions.append(read)
     return user
 

@@ -83,6 +83,7 @@ def process(build_id, build_output):
     data = json.loads(build_output["create"])
     with database.session_scope() as session:
         build = session.query(database.Build).filter_by(id=build_id).first()
+        build.package = None
         for recipe_compound in data["installed"]:
             recipe_data = recipe_compound["recipe"]
             recipe_revision = _process_recipe_revision(session, recipe_data, build)
