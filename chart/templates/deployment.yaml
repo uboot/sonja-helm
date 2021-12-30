@@ -6,7 +6,11 @@ metadata:
   labels:
     app: {{ template "sonja.fullname" $ }}-{{ .name }}
 spec:
-  replicas: {{ .replicas | default 1 }}
+{{- if .docker }}
+  replicas: {{ $.Values.linux.replicas | default 1 }}
+{{- else }}
+  replicas: 1
+{{- end }}
   selector:
     matchLabels:
       app: {{ template "sonja.fullname" $ }}-{{ .name }}
@@ -76,32 +80,28 @@ spec:
 {{- end }}
 ---
 {{- end }}
-{{- range .Values.windows.agents }}
+{{- range untilStep 0 (int .Values.windows.replicas) 1 }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "sonja.fullname" $ }}-windows-agent-{{ .name }}
+  name: {{ template "sonja.fullname" $ }}-windows-agent-{{ . }}
   labels:
     app: {{ template "sonja.fullname" $ }}-windows-agent
 spec:
-  replicas: {{ .replicas | default 1 }}
+  replicas: 1
   selector:
     matchLabels:
       app: {{ template "sonja.fullname" $ }}-windows-agent
-      deployment: {{ template "sonja.fullname" $ }}-windows-agent-{{ .name }}
+      deployment: {{ template "sonja.fullname" $ }}-windows-agent-{{ . }}
   template:
     metadata:
       labels:
         app: {{ template "sonja.fullname" $ }}-windows-agent
-        deployment: {{ template "sonja.fullname" $ }}-windows-agent-{{ .name }}
+        deployment: {{ template "sonja.fullname" $ }}-windows-agent-{{ . }}
     spec:
       containers:
       - name:  windows-agent
-{{- if .image }}
-        image: uboot/sonja-{{ .image }}:latest
-{{- else }}
-        image: uboot/sonja-{{ .name }}:latest
-{{- end }}
+        image: uboot/sonja-agent:latest
         livenessProbe:
           httpGet:
             path: /ping
@@ -125,6 +125,6 @@ spec:
         - name: SONJA_WINDOWSAGENT_URL
           value: {{ template "sonja.fullname" $ }}-windows-agent
         - name: DOCKER_HOST
-          value: {{ template "sonja.fullname" $ }}-windows-docker-{{ .name }}:2375
+          value: {{ template "sonja.fullname" $ }}-windows-docker-{{ . }}:2375
 ---
 {{- end }}
