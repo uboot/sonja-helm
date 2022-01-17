@@ -1,6 +1,7 @@
 from sonja import database
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 
 
 def __create_recipe(record: database.Recipe):
@@ -55,6 +56,7 @@ def __create_recipe_revision(record: database.RecipeRevision):
     )
 
 
+@require(database.PermissionLabel.read)
 def get_recipe(recipe_id):
     with database.session_scope() as session:
         record = session.query(database.Recipe).filter_by(id=recipe_id).first()
@@ -63,6 +65,7 @@ def get_recipe(recipe_id):
         return models.RecipeData(data=__create_recipe(record))
 
 
+@require(database.PermissionLabel.read)
 def get_recipes(ecosystem_id):
     with database.session_scope() as session:
         records = session.query(database.Recipe). \
@@ -70,6 +73,7 @@ def get_recipes(ecosystem_id):
         return models.EcosystemList(data=[__create_recipe(record) for record in records])
 
 
+@require(database.PermissionLabel.read)
 def get_recipe_revision(recipe_revision_id):
     with database.session_scope() as session:
         record = session.query(database.RecipeRevision).filter_by(id=recipe_revision_id).first()
@@ -78,6 +82,7 @@ def get_recipe_revision(recipe_revision_id):
         return models.RecipeRevisionData(data=__create_recipe_revision(record))
 
 
+@require(database.PermissionLabel.read)
 def get_recipe_revisions(recipe_id):
     with database.session_scope() as session:
         records = session.query(database.RecipeRevision). \

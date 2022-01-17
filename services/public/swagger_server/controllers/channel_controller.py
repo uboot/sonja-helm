@@ -3,6 +3,7 @@ import connexion
 from sonja import database
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 
 
 def __createChannel(record: database.Channel):
@@ -25,6 +26,7 @@ def __createChannel(record: database.Channel):
     )
 
 
+@require(database.PermissionLabel.write)
 def add_channel(body=None):
     if connexion.request.is_json:
         body = models.ChannelData.from_dict(connexion.request.get_json())  # noqa: E501
@@ -43,6 +45,7 @@ def add_channel(body=None):
         return models.ChannelData(data=__createChannel(record)), 201
 
 
+@require(database.PermissionLabel.write)
 def delete_channel(channel_id):
     with database.session_scope() as session:
         record = session.query(database.Channel).filter_by(id=channel_id).first()
@@ -52,6 +55,7 @@ def delete_channel(channel_id):
     return None
 
 
+@require(database.PermissionLabel.read)
 def get_channel(channel_id):
     with database.session_scope() as session:
         record = session.query(database.Channel).filter_by(id=channel_id).first()
@@ -60,6 +64,7 @@ def get_channel(channel_id):
         return models.ChannelData(data=__createChannel(record))
 
 
+@require(database.PermissionLabel.write)
 def update_channel(channel_id, body=None):
     if connexion.request.is_json:
         body = models.ChannelData.from_dict(connexion.request.get_json())  # noqa: E501

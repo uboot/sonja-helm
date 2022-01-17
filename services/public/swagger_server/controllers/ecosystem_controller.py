@@ -4,6 +4,7 @@ from sonja import database
 from sonja.ssh import encode, generate_rsa_key
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 
 
 def __create_ecosystem(record: database.Ecosystem):
@@ -60,6 +61,7 @@ def __create_ecosystem(record: database.Ecosystem):
     )
 
 
+@require(database.PermissionLabel.write)
 def add_ecosystem(body=None):
     if connexion.request.is_json:
         body = models.EcosystemData.from_dict(connexion.request.get_json())  # noqa: E501
@@ -91,6 +93,7 @@ def add_ecosystem(body=None):
         return models.EcosystemData(data=__create_ecosystem(record)), 201
 
 
+@require(database.PermissionLabel.write)
 def delete_ecosystem(ecosystem_id):
     with database.session_scope() as session:
         record = session.query(database.Ecosystem).filter_by(id=ecosystem_id).first()
@@ -100,6 +103,7 @@ def delete_ecosystem(ecosystem_id):
     return None
 
 
+@require(database.PermissionLabel.read)
 def get_ecosystem(ecosystem_id):
     with database.session_scope() as session:
         record = session.query(database.Ecosystem).filter_by(id=ecosystem_id).first()
@@ -108,6 +112,7 @@ def get_ecosystem(ecosystem_id):
         return models.EcosystemData(data=__create_ecosystem(record))
 
 
+@require(database.PermissionLabel.read)
 def get_ecosystems():
     with database.session_scope() as session:
         return models.EcosystemList(
@@ -115,6 +120,7 @@ def get_ecosystems():
         )
 
 
+@require(database.PermissionLabel.write)
 def update_ecosystem(ecosystem_id, body=None):
     if connexion.request.is_json:
         body = models.EcosystemData.from_dict(connexion.request.get_json())  # noqa: E501

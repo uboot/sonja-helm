@@ -1,6 +1,7 @@
 from sonja import database
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 
 
 def __create_commit(record: database.Commit):
@@ -37,6 +38,8 @@ def __create_commit(record: database.Commit):
         )
     )
 
+
+@require(database.PermissionLabel.read)
 def get_commit(commit_id):
     with database.session_scope() as session:
         record = session.query(database.Commit).filter_by(id=commit_id).first()
@@ -45,6 +48,7 @@ def get_commit(commit_id):
         return models.CommitData(data=__create_commit(record))
 
 
+@require(database.PermissionLabel.read)
 def get_commits(repo_id):
     with database.session_scope() as session:
         return models.CommitList(

@@ -439,8 +439,6 @@ def clear_ecosystems():
     drop_table(repo_label)
     drop_table(Repo.__table__)
     drop_table(Label.__table__)
-    drop_table(Permission.__table__)
-    drop_table(User.__table__)
 
     try:
         Base.metadata.create_all(engine)

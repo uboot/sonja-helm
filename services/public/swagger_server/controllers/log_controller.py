@@ -3,6 +3,7 @@ import connexion
 from sonja import database
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 
 
 def __create_log(record: database.Log):
@@ -15,6 +16,7 @@ def __create_log(record: database.Log):
     )
 
 
+@require(database.PermissionLabel.read)
 def get_log(log_id):
     with database.session_scope() as session:
         record = session.query(database.Log).filter_by(id=log_id).first()

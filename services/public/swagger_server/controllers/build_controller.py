@@ -6,6 +6,7 @@ from sonja.config import logger
 from sonja.swagger_client import ApiClient, Configuration, AgentApi
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 from urllib3.exceptions import MaxRetryError
 
 linux_agent_url = os.environ.get('SONJA_LINUXAGENT_URL', '127.0.0.1')
@@ -70,6 +71,7 @@ def __create_build(record: database.Build):
     )
 
 
+@require(database.PermissionLabel.read)
 def get_build(build_id):
     with database.session_scope() as session:
         record = session.query(database.Build).filter_by(id=build_id).first()
@@ -78,6 +80,7 @@ def get_build(build_id):
         return models.BuildData(data=__create_build(record))
 
 
+@require(database.PermissionLabel.read)
 def get_builds(ecosystem_id):
     with database.session_scope() as session:
         # try:
@@ -90,6 +93,7 @@ def get_builds(ecosystem_id):
         return models.BuildList(data=[__create_build(record) for record in records])
 
 
+@require(database.PermissionLabel.write)
 def update_build(build_id, body=None):
     if connexion.request.is_json:
         body = models.BuildData.from_dict(connexion.request.get_json())  # noqa: E501

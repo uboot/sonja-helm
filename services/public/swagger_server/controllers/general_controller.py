@@ -8,6 +8,7 @@ from flask import abort
 from flask_login import login_user, logout_user
 from urllib3.exceptions import MaxRetryError
 from swagger_server import auth, models
+from swagger_server.controllers.authorization import require
 
 
 crawler_url = os.environ.get('SONJA_CRAWLER_URL', '127.0.0.1')
@@ -16,6 +17,7 @@ crawler_configuration.host = "http://{0}:8080".format(crawler_url)
 crawler = CrawlerApi(ApiClient(crawler_configuration))
 
 
+@require(database.PermissionLabel.write)
 def clear_database():  # noqa: E501
     """remove all entries from the database
 
@@ -28,6 +30,7 @@ def clear_database():  # noqa: E501
     return 'success'
 
 
+@require(database.PermissionLabel.write)
 def clear_ecosystems():  # noqa: E501
     """remove all entries but the ecosystems from the database
 
@@ -110,6 +113,7 @@ def ping():  # noqa: E501
     return 'success'
 
 
+@require(database.PermissionLabel.write)
 def populate_database():  # noqa: E501
     """populate the database with sample data
 
@@ -122,6 +126,7 @@ def populate_database():  # noqa: E501
     return 'success'
 
 
+@require(database.PermissionLabel.write)
 def process_repo(repo_id):  # noqa: E501
     """scan repos for new commits
 

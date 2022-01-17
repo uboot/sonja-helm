@@ -1,6 +1,7 @@
 from sonja import database
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 
 
 def __create_package(record: database.Package):
@@ -37,6 +38,7 @@ def __create_package(record: database.Package):
     )
 
 
+@require(database.PermissionLabel.read)
 def get_package(package_id):
     with database.session_scope() as session:
         record = session.query(database.Package).filter_by(id=package_id).first()

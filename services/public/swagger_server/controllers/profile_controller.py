@@ -3,6 +3,7 @@ import connexion
 from sonja import database
 from flask import abort
 from swagger_server import models
+from swagger_server.controllers.authorization import require
 
 
 platform_table = {
@@ -35,6 +36,7 @@ def __create_profile(record: database.Profile):
     )
 
 
+@require(database.PermissionLabel.write)
 def add_profile(body=None):
     if connexion.request.is_json:
         body = models.ProfileData.from_dict(connexion.request.get_json())  # noqa: E501
@@ -59,6 +61,7 @@ def add_profile(body=None):
         return models.ProfileData(data=__create_profile(record)), 201
 
 
+@require(database.PermissionLabel.write)
 def delete_profile(profile_id):
     with database.session_scope() as session:
         record = session.query(database.Profile).filter_by(id=profile_id).first()
@@ -68,6 +71,7 @@ def delete_profile(profile_id):
     return None
 
 
+@require(database.PermissionLabel.read)
 def get_profile(profile_id):
     with database.session_scope() as session:
         record = session.query(database.Profile).filter_by(id=profile_id).first()
@@ -76,6 +80,7 @@ def get_profile(profile_id):
         return models.ProfileData(data=__create_profile(record))
 
 
+@require(database.PermissionLabel.write)
 def update_profile(profile_id, body=None):
     if connexion.request.is_json:
         body = models.ProfileData.from_dict(connexion.request.get_json())  # noqa: E501
