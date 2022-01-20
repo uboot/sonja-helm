@@ -252,7 +252,6 @@ class Recipe(Base):
     version = Column(String(255))
     user = Column(String(255))
     channel = Column(String(255))
-    revision = Column(String(255))
 
 
 class RecipeRevision(Base):
