@@ -1,0 +1,41 @@
+{
+  "error": true,
+  "installed": [
+    {
+      "recipe": {
+        "id": "hello/1.2.3#f5c1ba6f1af634f500f7e0255619fecf4777965f",
+        "downloaded": false,
+        "exported": true,
+        "error": null,
+        "remote": null,
+        "time": "2022-01-20T10:40:23.204137",
+        "dependency": false,
+        "name": "hello",
+        "version": "1.2.3",
+        "user": null,
+        "channel": null
+      },
+      "packages": []
+    },
+    {
+      "recipe": {
+        "id": "base/1.2.3@mycompany/stable",
+        "downloaded": false,
+        "exported": false,
+        "error": {
+          "type": "missing",
+          "description": "Unable to find 'base/1.2.3@mycompany/stable' in remotes",
+          "remote": null
+        },
+        "remote": null,
+        "time": "2022-01-20T10:40:25.293274",
+        "dependency": true,
+        "name": "base",
+        "version": "1.2.3",
+        "user": "mycompany",
+        "channel": "stable"
+      },
+      "packages": []
+    }
+  ]
+}

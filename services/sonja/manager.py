@@ -63,7 +63,8 @@ def _process_recipe_revision(session: database.Session, recipe_data: dict, build
     return recipe_revision
 
 
-def _process_package(session: database.Session, package_data: dict, recipe_revision: database.RecipeRevision) -> database.Package:
+def _process_package(session: database.Session, package_data: dict, recipe_revision: database.RecipeRevision)\
+        -> database.Package:
     package_id = package_data["id"]
     package = session.query(database.Package).filter_by(
         package_id=package_id,

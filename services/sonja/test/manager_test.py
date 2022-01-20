@@ -11,7 +11,7 @@ import unittest
 
 def _setup_build_output():
     build_output = dict()
-    create_output_file = os.path.join(os.path.dirname(__file__), "create.json")
+    create_output_file = os.path.join(os.path.dirname(__file__), "data/create.json")
     with open(create_output_file) as f:
         build_output["create"] = f.read()
     return build_output
