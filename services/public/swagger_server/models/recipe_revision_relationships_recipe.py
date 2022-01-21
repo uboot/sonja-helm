@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.recipe_revision_relationships_recipe_data import RecipeRevisionRelationshipsRecipeData  # noqa: F401,E501
+from swagger_server.models.build_relationships_missingrecipes_data import BuildRelationshipsMissingrecipesData  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,14 +15,14 @@ class RecipeRevisionRelationshipsRecipe(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, data: RecipeRevisionRelationshipsRecipeData=None):  # noqa: E501
+    def __init__(self, data: BuildRelationshipsMissingrecipesData=None):  # noqa: E501
         """RecipeRevisionRelationshipsRecipe - a model defined in Swagger
 
         :param data: The data of this RecipeRevisionRelationshipsRecipe.  # noqa: E501
-        :type data: RecipeRevisionRelationshipsRecipeData
+        :type data: BuildRelationshipsMissingrecipesData
         """
         self.swagger_types = {
-            'data': RecipeRevisionRelationshipsRecipeData
+            'data': BuildRelationshipsMissingrecipesData
         }
 
         self.attribute_map = {
@@ -42,22 +42,22 @@ class RecipeRevisionRelationshipsRecipe(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def data(self) -> RecipeRevisionRelationshipsRecipeData:
+    def data(self) -> BuildRelationshipsMissingrecipesData:
         """Gets the data of this RecipeRevisionRelationshipsRecipe.
 
 
         :return: The data of this RecipeRevisionRelationshipsRecipe.
-        :rtype: RecipeRevisionRelationshipsRecipeData
+        :rtype: BuildRelationshipsMissingrecipesData
         """
         return self._data
 
     @data.setter
-    def data(self, data: RecipeRevisionRelationshipsRecipeData):
+    def data(self, data: BuildRelationshipsMissingrecipesData):
         """Sets the data of this RecipeRevisionRelationshipsRecipe.
 
 
         :param data: The data of this RecipeRevisionRelationshipsRecipe.
-        :type data: RecipeRevisionRelationshipsRecipeData
+        :type data: BuildRelationshipsMissingrecipesData
         """
 
         self._data = data

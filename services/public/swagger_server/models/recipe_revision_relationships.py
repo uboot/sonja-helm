@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.recipe_revision_relationships_packages import RecipeRevisionRelationshipsPackages  # noqa: F401,E501
+from swagger_server.models.build_relationships_missingpackages import BuildRelationshipsMissingpackages  # noqa: F401,E501
 from swagger_server.models.recipe_revision_relationships_recipe import RecipeRevisionRelationshipsRecipe  # noqa: F401,E501
 from swagger_server import util
 
@@ -16,17 +16,17 @@ class RecipeRevisionRelationships(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, recipe: RecipeRevisionRelationshipsRecipe=None, packages: RecipeRevisionRelationshipsPackages=None):  # noqa: E501
+    def __init__(self, recipe: RecipeRevisionRelationshipsRecipe=None, packages: BuildRelationshipsMissingpackages=None):  # noqa: E501
         """RecipeRevisionRelationships - a model defined in Swagger
 
         :param recipe: The recipe of this RecipeRevisionRelationships.  # noqa: E501
         :type recipe: RecipeRevisionRelationshipsRecipe
         :param packages: The packages of this RecipeRevisionRelationships.  # noqa: E501
-        :type packages: RecipeRevisionRelationshipsPackages
+        :type packages: BuildRelationshipsMissingpackages
         """
         self.swagger_types = {
             'recipe': RecipeRevisionRelationshipsRecipe,
-            'packages': RecipeRevisionRelationshipsPackages
+            'packages': BuildRelationshipsMissingpackages
         }
 
         self.attribute_map = {
@@ -69,22 +69,22 @@ class RecipeRevisionRelationships(Model):
         self._recipe = recipe
 
     @property
-    def packages(self) -> RecipeRevisionRelationshipsPackages:
+    def packages(self) -> BuildRelationshipsMissingpackages:
         """Gets the packages of this RecipeRevisionRelationships.
 
 
         :return: The packages of this RecipeRevisionRelationships.
-        :rtype: RecipeRevisionRelationshipsPackages
+        :rtype: BuildRelationshipsMissingpackages
         """
         return self._packages
 
     @packages.setter
-    def packages(self, packages: RecipeRevisionRelationshipsPackages):
+    def packages(self, packages: BuildRelationshipsMissingpackages):
         """Sets the packages of this RecipeRevisionRelationships.
 
 
         :param packages: The packages of this RecipeRevisionRelationships.
-        :type packages: RecipeRevisionRelationshipsPackages
+        :type packages: BuildRelationshipsMissingpackages
         """
 
         self._packages = packages

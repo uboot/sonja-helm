@@ -39,12 +39,12 @@ def __create_recipe_revision(record: database.RecipeRevision):
         ),
         relationships=models.RecipeRevisionRelationships(
             recipe=models.RecipeRevisionRelationshipsRecipe(
-                data=models.RecipeRevisionRelationshipsRecipeData(
+                data=models.BuildRelationshipsCommitData(
                     id=record.recipe_id,
                     type="recipes"
                 )
             ),
-            packages=models.RecipeRevisionRelationshipsPackages(
+            packages=models.BuildRelationshipsMissingpackages(
                 data=[
                     models.BuildRelationshipsPackageData(
                         id=package.id,

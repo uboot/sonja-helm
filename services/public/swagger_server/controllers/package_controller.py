@@ -18,7 +18,7 @@ def __create_package(record: database.Package):
                     type="recipe-revisions"
                 )
             ),
-            requires=models.RecipeRevisionRelationshipsPackages(
+            requires=models.BuildRelationshipsMissingpackages(
                 data=[
                     models.BuildRelationshipsPackageData(
                         id=package.id,
@@ -26,7 +26,7 @@ def __create_package(record: database.Package):
                     ) for package in record.requires
                 ]
             ),
-            required_by=models.RecipeRevisionRelationshipsPackages(
+            required_by=models.BuildRelationshipsMissingpackages(
                 data=[
                     models.BuildRelationshipsPackageData(
                         id=package.id,

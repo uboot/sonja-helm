@@ -105,13 +105,14 @@ class Agent(Worker):
                         return True
 
                 logger.info("Process build output")
-                manager.process(self.__build_id, builder.build_output)
+                manager.process_success(self.__build_id, builder.build_output)
 
                 logger.info("Set status of build '%d' to 'success'", self.__build_id)
                 self.__set_build_status(database.BuildStatus.success)
                 self.__build_id = None
         except Exception as e:
             logger.error(e)
+            manager.process_failure(self.__build_id, builder.build_output)
             logger.info("Set status of build '%d' to 'error'", self.__build_id)
             self.__set_build_status(database.BuildStatus.error)
             self.__build_id = None

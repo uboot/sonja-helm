@@ -219,6 +219,16 @@ class BuildStatus(enum.Enum):
     stopped = 6
 
 
+missing_package = Table('missing_package', Base.metadata,
+    Column('build_id', Integer, ForeignKey('build.id'), primary_key=True),
+    Column('package_id', Integer, ForeignKey('package.id'), primary_key=True))
+
+
+missing_recipe = Table('missing_recipe', Base.metadata,
+    Column('build_id', Integer, ForeignKey('build.id'), primary_key=True),
+    Column('recipe_id', Integer, ForeignKey('recipe.id'), primary_key=True))
+
+
 class Build(Base):
     __tablename__ = 'build'
 
@@ -233,6 +243,10 @@ class Build(Base):
     profile = relationship("Profile")
     log_id = Column(Integer, ForeignKey('log.id'), nullable=False)
     log = relationship("Log")
+    missing_packages = relationship("Package", secondary=missing_package,
+                                    backref="waiting_builds")
+    missing_recipes = relationship("Recipe", secondary=missing_recipe,
+                                    backref="waiting_builds")
 
 
 class Log(Base):
@@ -425,6 +439,8 @@ def clear_ecosystems():
         except OperationalError as e:
             logger.warning("Failed to drop table %s", table.name)
 
+    drop_table(missing_package)
+    drop_table(missing_recipe)
     drop_table(Build.__table__)
     drop_table(Log.__table__)
     drop_table(package_requirement)

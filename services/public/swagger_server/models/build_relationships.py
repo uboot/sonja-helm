@@ -8,6 +8,8 @@ from typing import List, Dict  # noqa: F401
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.build_relationships_commit import BuildRelationshipsCommit  # noqa: F401,E501
 from swagger_server.models.build_relationships_log import BuildRelationshipsLog  # noqa: F401,E501
+from swagger_server.models.build_relationships_missingpackages import BuildRelationshipsMissingpackages  # noqa: F401,E501
+from swagger_server.models.build_relationships_missingrecipes import BuildRelationshipsMissingrecipes  # noqa: F401,E501
 from swagger_server.models.build_relationships_package import BuildRelationshipsPackage  # noqa: F401,E501
 from swagger_server.models.build_relationships_profile import BuildRelationshipsProfile  # noqa: F401,E501
 from swagger_server.models.repo_relationships_ecosystem import RepoRelationshipsEcosystem  # noqa: F401,E501
@@ -19,7 +21,7 @@ class BuildRelationships(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, ecosystem: RepoRelationshipsEcosystem=None, commit: BuildRelationshipsCommit=None, profile: BuildRelationshipsProfile=None, log: BuildRelationshipsLog=None, package: BuildRelationshipsPackage=None):  # noqa: E501
+    def __init__(self, ecosystem: RepoRelationshipsEcosystem=None, commit: BuildRelationshipsCommit=None, profile: BuildRelationshipsProfile=None, log: BuildRelationshipsLog=None, package: BuildRelationshipsPackage=None, missing_packages: BuildRelationshipsMissingpackages=None, missing_recipes: BuildRelationshipsMissingrecipes=None):  # noqa: E501
         """BuildRelationships - a model defined in Swagger
 
         :param ecosystem: The ecosystem of this BuildRelationships.  # noqa: E501
@@ -32,13 +34,19 @@ class BuildRelationships(Model):
         :type log: BuildRelationshipsLog
         :param package: The package of this BuildRelationships.  # noqa: E501
         :type package: BuildRelationshipsPackage
+        :param missing_packages: The missing_packages of this BuildRelationships.  # noqa: E501
+        :type missing_packages: BuildRelationshipsMissingpackages
+        :param missing_recipes: The missing_recipes of this BuildRelationships.  # noqa: E501
+        :type missing_recipes: BuildRelationshipsMissingrecipes
         """
         self.swagger_types = {
             'ecosystem': RepoRelationshipsEcosystem,
             'commit': BuildRelationshipsCommit,
             'profile': BuildRelationshipsProfile,
             'log': BuildRelationshipsLog,
-            'package': BuildRelationshipsPackage
+            'package': BuildRelationshipsPackage,
+            'missing_packages': BuildRelationshipsMissingpackages,
+            'missing_recipes': BuildRelationshipsMissingrecipes
         }
 
         self.attribute_map = {
@@ -46,13 +54,17 @@ class BuildRelationships(Model):
             'commit': 'commit',
             'profile': 'profile',
             'log': 'log',
-            'package': 'package'
+            'package': 'package',
+            'missing_packages': 'missing-packages',
+            'missing_recipes': 'missing-recipes'
         }
         self._ecosystem = ecosystem
         self._commit = commit
         self._profile = profile
         self._log = log
         self._package = package
+        self._missing_packages = missing_packages
+        self._missing_recipes = missing_recipes
 
     @classmethod
     def from_dict(cls, dikt) -> 'BuildRelationships':
@@ -169,3 +181,45 @@ class BuildRelationships(Model):
         """
 
         self._package = package
+
+    @property
+    def missing_packages(self) -> BuildRelationshipsMissingpackages:
+        """Gets the missing_packages of this BuildRelationships.
+
+
+        :return: The missing_packages of this BuildRelationships.
+        :rtype: BuildRelationshipsMissingpackages
+        """
+        return self._missing_packages
+
+    @missing_packages.setter
+    def missing_packages(self, missing_packages: BuildRelationshipsMissingpackages):
+        """Sets the missing_packages of this BuildRelationships.
+
+
+        :param missing_packages: The missing_packages of this BuildRelationships.
+        :type missing_packages: BuildRelationshipsMissingpackages
+        """
+
+        self._missing_packages = missing_packages
+
+    @property
+    def missing_recipes(self) -> BuildRelationshipsMissingrecipes:
+        """Gets the missing_recipes of this BuildRelationships.
+
+
+        :return: The missing_recipes of this BuildRelationships.
+        :rtype: BuildRelationshipsMissingrecipes
+        """
+        return self._missing_recipes
+
+    @missing_recipes.setter
+    def missing_recipes(self, missing_recipes: BuildRelationshipsMissingrecipes):
+        """Sets the missing_recipes of this BuildRelationships.
+
+
+        :param missing_recipes: The missing_recipes of this BuildRelationships.
+        :type missing_recipes: BuildRelationshipsMissingrecipes
+        """
+
+        self._missing_recipes = missing_recipes

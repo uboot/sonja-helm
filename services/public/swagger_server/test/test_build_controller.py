@@ -16,7 +16,10 @@ class TestBuildController(BaseTestCase):
         super().setUp()
         self.login()
         with database.session_scope() as session:
-            build = util.create_build({"build.with_dependencies": True})
+            build = util.create_build({
+                "build.with_dependencies": True,
+                "build.with_missing": True
+            })
             session.add(build)
 
     def test_get_build(self):

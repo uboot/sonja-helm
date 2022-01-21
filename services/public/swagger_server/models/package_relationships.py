@@ -6,8 +6,8 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.build_relationships_missingpackages import BuildRelationshipsMissingpackages  # noqa: F401,E501
 from swagger_server.models.package_relationships_reciperevision import PackageRelationshipsReciperevision  # noqa: F401,E501
-from swagger_server.models.recipe_revision_relationships_packages import RecipeRevisionRelationshipsPackages  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -16,20 +16,20 @@ class PackageRelationships(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, recipe_revision: PackageRelationshipsReciperevision=None, requires: RecipeRevisionRelationshipsPackages=None, required_by: RecipeRevisionRelationshipsPackages=None):  # noqa: E501
+    def __init__(self, recipe_revision: PackageRelationshipsReciperevision=None, requires: BuildRelationshipsMissingpackages=None, required_by: BuildRelationshipsMissingpackages=None):  # noqa: E501
         """PackageRelationships - a model defined in Swagger
 
         :param recipe_revision: The recipe_revision of this PackageRelationships.  # noqa: E501
         :type recipe_revision: PackageRelationshipsReciperevision
         :param requires: The requires of this PackageRelationships.  # noqa: E501
-        :type requires: RecipeRevisionRelationshipsPackages
+        :type requires: BuildRelationshipsMissingpackages
         :param required_by: The required_by of this PackageRelationships.  # noqa: E501
-        :type required_by: RecipeRevisionRelationshipsPackages
+        :type required_by: BuildRelationshipsMissingpackages
         """
         self.swagger_types = {
             'recipe_revision': PackageRelationshipsReciperevision,
-            'requires': RecipeRevisionRelationshipsPackages,
-            'required_by': RecipeRevisionRelationshipsPackages
+            'requires': BuildRelationshipsMissingpackages,
+            'required_by': BuildRelationshipsMissingpackages
         }
 
         self.attribute_map = {
@@ -74,43 +74,43 @@ class PackageRelationships(Model):
         self._recipe_revision = recipe_revision
 
     @property
-    def requires(self) -> RecipeRevisionRelationshipsPackages:
+    def requires(self) -> BuildRelationshipsMissingpackages:
         """Gets the requires of this PackageRelationships.
 
 
         :return: The requires of this PackageRelationships.
-        :rtype: RecipeRevisionRelationshipsPackages
+        :rtype: BuildRelationshipsMissingpackages
         """
         return self._requires
 
     @requires.setter
-    def requires(self, requires: RecipeRevisionRelationshipsPackages):
+    def requires(self, requires: BuildRelationshipsMissingpackages):
         """Sets the requires of this PackageRelationships.
 
 
         :param requires: The requires of this PackageRelationships.
-        :type requires: RecipeRevisionRelationshipsPackages
+        :type requires: BuildRelationshipsMissingpackages
         """
 
         self._requires = requires
 
     @property
-    def required_by(self) -> RecipeRevisionRelationshipsPackages:
+    def required_by(self) -> BuildRelationshipsMissingpackages:
         """Gets the required_by of this PackageRelationships.
 
 
         :return: The required_by of this PackageRelationships.
-        :rtype: RecipeRevisionRelationshipsPackages
+        :rtype: BuildRelationshipsMissingpackages
         """
         return self._required_by
 
     @required_by.setter
-    def required_by(self, required_by: RecipeRevisionRelationshipsPackages):
+    def required_by(self, required_by: BuildRelationshipsMissingpackages):
         """Sets the required_by of this PackageRelationships.
 
 
         :param required_by: The required_by of this PackageRelationships.
-        :type required_by: RecipeRevisionRelationshipsPackages
+        :type required_by: BuildRelationshipsMissingpackages
         """
 
         self._required_by = required_by

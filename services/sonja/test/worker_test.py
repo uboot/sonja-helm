@@ -4,7 +4,7 @@ from sonja.crawler import Crawler
 from sonja.scheduler import Scheduler
 from unittest.mock import Mock
 
-import sonja.test.util as util
+from sonja.test import util
 import time
 import unittest
 

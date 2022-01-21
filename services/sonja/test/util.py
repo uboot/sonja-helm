@@ -134,6 +134,9 @@ def create_build(parameters):
     build.log = create_log(parameters)
     if parameters.get("build.with_dependencies", False):
         build.package = create_package(parameters)
+    if parameters.get("build.with_missing", False):
+        build.missing_recipes = [create_recipe(parameters)]
+        build.missing_packages = [create_package(parameters)]
     return build
 
 
