@@ -55,8 +55,8 @@ def cancel_build(builder, seconds):
 
 def get_build_parameters(profile, https=False):
     return {
-        "conan_config_url": "git@github.com:uboot/sonja.git",
-        "conan_config_path": "conan-config",
+        "conan_config_url": "git@github.com:uboot/conan-config.git",
+        "conan_config_path": "default",
         "conan_config_branch": "",
         "conan_remote": "uboot",
         "conan_user": "agent",

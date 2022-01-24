@@ -1150,7 +1150,7 @@ components:
             - id: "1"
               type: profiles
         attributes:
-          conan-config-path: ""
+          conan-config-path: default
           known-hosts: Z2l0aHViLmNvbSwxNDAuODIuMTIxLjQgc3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBQkl3QUFBUUVBcTJBN2hSR21kbm05dFVEYk85SURTd0JLNlRiUWErUFhZUENQeTZyYlRyVHR3N1BIa2NjS3JwcDB5VmhwNUhkRUljS3I2cExsVkRCZk9MWDlRVXN5Q09WMHd6ZmpJSk5sR0VZc2RsTEppekhoYm4ybVVqdlNBSFFxWkVUWVA4MWVGekxRTm5QSHQ0RVZWVWg3VmZERVNVODRLZXptRDVRbFdwWExtdlUzMS95TWYrU2U4eGhIVHZLU0NaSUZJbVd3b0c2bWJVb1dmOW56cElvYVNqQit3ZXFxVVVtcGFhYXNYVmFsNzJKK1VYMkIrMlJQVzNSY1QwZU96UWdxbEpMM1JLclRKdmRzakUzSkVBdkdxM2xHSFNaWHkyOEczc2t1YTJTbVZpL3c0eUNFNmdiT0RxblRXbGc3K3dDNjA0eWRHWEE4VkppUzVhcDQzSlhpVUZGQWFRPT0K
           credentials:
           - password: Passw0rd
@@ -1159,7 +1159,7 @@ components:
           - password: Passw0rd
             url: https://user@github.com
             username: user
-          conan-config-url: git@github.com:uboot/sonja.git
+          conan-config-url: git@github.com:uboot/conan-config.git
           name: My Company
           conan-config-branch: master
           conan-password: demo
@@ -1201,7 +1201,7 @@ components:
               - id: "1"
                 type: profiles
           attributes:
-            conan-config-path: ""
+            conan-config-path: default
             known-hosts: Z2l0aHViLmNvbSwxNDAuODIuMTIxLjQgc3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBQkl3QUFBUUVBcTJBN2hSR21kbm05dFVEYk85SURTd0JLNlRiUWErUFhZUENQeTZyYlRyVHR3N1BIa2NjS3JwcDB5VmhwNUhkRUljS3I2cExsVkRCZk9MWDlRVXN5Q09WMHd6ZmpJSk5sR0VZc2RsTEppekhoYm4ybVVqdlNBSFFxWkVUWVA4MWVGekxRTm5QSHQ0RVZWVWg3VmZERVNVODRLZXptRDVRbFdwWExtdlUzMS95TWYrU2U4eGhIVHZLU0NaSUZJbVd3b0c2bWJVb1dmOW56cElvYVNqQit3ZXFxVVVtcGFhYXNYVmFsNzJKK1VYMkIrMlJQVzNSY1QwZU96UWdxbEpMM1JLclRKdmRzakUzSkVBdkdxM2xHSFNaWHkyOEczc2t1YTJTbVZpL3c0eUNFNmdiT0RxblRXbGc3K3dDNjA0eWRHWEE4VkppUzVhcDQzSlhpVUZGQWFRPT0K
             credentials:
             - password: Passw0rd
@@ -1210,7 +1210,7 @@ components:
             - password: Passw0rd
               url: https://user@github.com
               username: user
-            conan-config-url: git@github.com:uboot/sonja.git
+            conan-config-url: git@github.com:uboot/conan-config.git
             name: My Company
             conan-config-branch: master
             conan-password: demo
@@ -1254,7 +1254,7 @@ components:
               - id: "1"
                 type: profiles
           attributes:
-            conan-config-path: ""
+            conan-config-path: default
             known-hosts: Z2l0aHViLmNvbSwxNDAuODIuMTIxLjQgc3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBQkl3QUFBUUVBcTJBN2hSR21kbm05dFVEYk85SURTd0JLNlRiUWErUFhZUENQeTZyYlRyVHR3N1BIa2NjS3JwcDB5VmhwNUhkRUljS3I2cExsVkRCZk9MWDlRVXN5Q09WMHd6ZmpJSk5sR0VZc2RsTEppekhoYm4ybVVqdlNBSFFxWkVUWVA4MWVGekxRTm5QSHQ0RVZWVWg3VmZERVNVODRLZXptRDVRbFdwWExtdlUzMS95TWYrU2U4eGhIVHZLU0NaSUZJbVd3b0c2bWJVb1dmOW56cElvYVNqQit3ZXFxVVVtcGFhYXNYVmFsNzJKK1VYMkIrMlJQVzNSY1QwZU96UWdxbEpMM1JLclRKdmRzakUzSkVBdkdxM2xHSFNaWHkyOEczc2t1YTJTbVZpL3c0eUNFNmdiT0RxblRXbGc3K3dDNjA0eWRHWEE4VkppUzVhcDQzSlhpVUZGQWFRPT0K
             credentials:
             - password: Passw0rd
@@ -1263,7 +1263,7 @@ components:
             - password: Passw0rd
               url: https://user@github.com
               username: user
-            conan-config-url: git@github.com:uboot/sonja.git
+            conan-config-url: git@github.com:uboot/conan-config.git
             name: My Company
             conan-config-branch: master
             conan-password: demo
@@ -1296,7 +1296,7 @@ components:
               - id: "1"
                 type: profiles
           attributes:
-            conan-config-path: ""
+            conan-config-path: default
             known-hosts: Z2l0aHViLmNvbSwxNDAuODIuMTIxLjQgc3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBQkl3QUFBUUVBcTJBN2hSR21kbm05dFVEYk85SURTd0JLNlRiUWErUFhZUENQeTZyYlRyVHR3N1BIa2NjS3JwcDB5VmhwNUhkRUljS3I2cExsVkRCZk9MWDlRVXN5Q09WMHd6ZmpJSk5sR0VZc2RsTEppekhoYm4ybVVqdlNBSFFxWkVUWVA4MWVGekxRTm5QSHQ0RVZWVWg3VmZERVNVODRLZXptRDVRbFdwWExtdlUzMS95TWYrU2U4eGhIVHZLU0NaSUZJbVd3b0c2bWJVb1dmOW56cElvYVNqQit3ZXFxVVVtcGFhYXNYVmFsNzJKK1VYMkIrMlJQVzNSY1QwZU96UWdxbEpMM1JLclRKdmRzakUzSkVBdkdxM2xHSFNaWHkyOEczc2t1YTJTbVZpL3c0eUNFNmdiT0RxblRXbGc3K3dDNjA0eWRHWEE4VkppUzVhcDQzSlhpVUZGQWFRPT0K
             credentials:
             - password: Passw0rd
@@ -1305,7 +1305,7 @@ components:
             - password: Passw0rd
               url: https://user@github.com
               username: user
-            conan-config-url: git@github.com:uboot/sonja.git
+            conan-config-url: git@github.com:uboot/conan-config.git
             name: My Company
             conan-config-branch: master
             conan-password: demo
@@ -2192,10 +2192,10 @@ components:
           example: uboot
         conan-config-url:
           type: string
-          example: git@github.com:uboot/sonja.git
+          example: git@github.com:uboot/conan-config.git
         conan-config-path:
           type: string
-          example: ""
+          example: default
         conan-config-branch:
           type: string
           example: master
@@ -2216,7 +2216,7 @@ components:
           items:
             $ref: '#/components/schemas/Ecosystem_attributes_credentials'
       example:
-        conan-config-path: ""
+        conan-config-path: default
         known-hosts: Z2l0aHViLmNvbSwxNDAuODIuMTIxLjQgc3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBQkl3QUFBUUVBcTJBN2hSR21kbm05dFVEYk85SURTd0JLNlRiUWErUFhZUENQeTZyYlRyVHR3N1BIa2NjS3JwcDB5VmhwNUhkRUljS3I2cExsVkRCZk9MWDlRVXN5Q09WMHd6ZmpJSk5sR0VZc2RsTEppekhoYm4ybVVqdlNBSFFxWkVUWVA4MWVGekxRTm5QSHQ0RVZWVWg3VmZERVNVODRLZXptRDVRbFdwWExtdlUzMS95TWYrU2U4eGhIVHZLU0NaSUZJbVd3b0c2bWJVb1dmOW56cElvYVNqQit3ZXFxVVVtcGFhYXNYVmFsNzJKK1VYMkIrMlJQVzNSY1QwZU96UWdxbEpMM1JLclRKdmRzakUzSkVBdkdxM2xHSFNaWHkyOEczc2t1YTJTbVZpL3c0eUNFNmdiT0RxblRXbGc3K3dDNjA0eWRHWEE4VkppUzVhcDQzSlhpVUZGQWFRPT0K
         credentials:
         - password: Passw0rd
@@ -2225,7 +2225,7 @@ components:
         - password: Passw0rd
           url: https://user@github.com
           username: user
-        conan-config-url: git@github.com:uboot/sonja.git
+        conan-config-url: git@github.com:uboot/conan-config.git
         name: My Company
         conan-config-branch: master
         conan-password: demo

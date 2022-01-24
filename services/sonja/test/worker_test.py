@@ -54,6 +54,18 @@ class AgentTest(unittest.TestCase):
         self.agent.start()
         self.assertEquals(self.__wait_for_build_status(database.BuildStatus.success, 15), database.BuildStatus.success)
 
+    def test_complete_build_with_dependency(self):
+        with database.session_scope() as session:
+            session.add(util.create_build({
+                "repo.dependent": True,
+                "ecosystem.empty_remote": True
+            }))
+        self.agent.start()
+        self.assertEquals(self.__wait_for_build_status(database.BuildStatus.error, 15), database.BuildStatus.error)
+        with database.session_scope() as session:
+            build = session.query(database.Build).first()
+            self.assertEquals(1, len(build.missing_recipes))
+
     def test_complete_build_https(self):
         with database.session_scope() as session:
             session.add(util.create_build({"repo.https": True}))

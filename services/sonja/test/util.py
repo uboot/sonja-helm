@@ -32,8 +32,8 @@ def create_ecosystem(parameters):
                              "E4VkppUzVhcDQzSlhpVUZGQWFRPT0K")
     ecosystem.ssh_key = os.environ.get("SSH_KEY", "")
     ecosystem.public_ssh_key = os.environ.get("PUBLIC_SSH_KEY", "")
-    ecosystem.conan_config_url = "git@github.com:uboot/sonja.git"
-    ecosystem.conan_config_path = "conan-config"
+    ecosystem.conan_config_url = "git@github.com:uboot/conan-config.git"
+    ecosystem.conan_config_path = "empty" if parameters.get("ecosystem.ecosystem.empty_remote", "False") else "default"
     ecosystem.conan_config_branch = ""
     ecosystem.conan_remote = "uboot"
     ecosystem.conan_user = "agent"
@@ -62,6 +62,8 @@ def create_repo(parameters):
         repo.url = "https://github.com/uboot/sonja.git"
         if parameters.get("repo.deadlock", False):
             repo.path = "packages/deadlock"
+        elif parameters.get("repo.dependent", False):
+            repo.path = "packages/hello"
         else:
             repo.path = "packages/base"
             repo.options = [database.Option("base:with_tests", "False")]
