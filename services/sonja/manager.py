@@ -20,16 +20,16 @@ def _process_recipe(session: database.Session, recipe_data: dict, ecosystem: dat
         channel=channel
     ).first()
 
-    if recipe:
-        return recipe
+    if not recipe:
+        recipe = database.Recipe()
+        recipe.ecosystem = ecosystem
+        recipe.name = name
+        recipe.version = version
+        recipe.user = user
+        recipe.channel = channel
 
-    recipe = database.Recipe()
-    recipe.ecosystem = ecosystem
-    recipe.name = name
-    recipe.version = version
-    recipe.user = user
-    recipe.channel = channel
-
+    logger.debug("Process recipe '%s' ('%s/%s@%s/%s')", recipe.id, recipe.name, recipe.version,
+                 recipe.user, recipe.channel)
     return recipe
 
 
@@ -41,7 +41,7 @@ def _process_recipe_revision(session: database.Session, recipe_data: dict, ecosy
 
     m = re.match("[\\w\\+\\.-]+/[\\w\\+\\.-]+(?:@\\w+/\\w+)?(#(\\w+))?", recipe_data["id"])
     if m:
-        revision = m.group(2)
+        revision = m.group(2) if m.group(2) else ""
     else:
         logger.error("Invalid recipe ID '%s'", recipe_data["id"])
         return None
@@ -51,13 +51,12 @@ def _process_recipe_revision(session: database.Session, recipe_data: dict, ecosy
         revision=revision
     ).first()
 
-    if recipe_revision:
-        return recipe_revision
+    if not recipe_revision:
+        recipe_revision = database.RecipeRevision()
+        recipe_revision.recipe = recipe
+        recipe_revision.revision = revision
 
-    recipe_revision = database.RecipeRevision()
-    recipe_revision.recipe = recipe
-    recipe_revision.revision = revision
-
+    logger.debug("Process recipe revision '%s' (revision: '%s')", recipe_revision.id, recipe_revision.revision)
     return recipe_revision
 
 
@@ -69,23 +68,79 @@ def _process_package(session: database.Session, package_data: dict, recipe_revis
         recipe_revision_id=recipe_revision.id
     ).first()
 
-    if package:
-        return package
+    if not package:
+        package = database.Package()
+        package.package_id = package_id
+        package.recipe_revision = recipe_revision
+        session.add(package)
 
-    package = database.Package()
-    package.package_id = package_id
-    package.recipe_revision = recipe_revision
-    session.add(package)
-
+    logger.debug("Process package '%s' (ID: '%s')", package.id, package.package_id)
     return package
 
 
-def process_success(build_id, build_output):
+def _trigger_builds_for_recipe(session: database.Session, recipe: database.Recipe):
+
+    # get all failed builds which are waiting for this recipe
+    builds = session.query(database.Build).filter(database.Build.status==database.BuildStatus.error).\
+        filter(database.missing_recipe.columns['build_id']==database.Build.id).\
+        filter(database.missing_recipe.columns['recipe_id']==recipe.id).\
+        filter(database.Build.commit_id==database.Commit.id).\
+        filter(database.Commit.status==database.CommitStatus.building).\
+        all()
+
+    # re-trigger these builds
+    for build in builds:
+        logger.info("Set status of build '%d' to 'new'", build.id)
+        build.status = database.BuildStatus.new
+
+    logger.debug("Trigger builds for recipe '%s' ('%s/%s@%s/%s')", recipe.id, recipe.name, recipe.version,
+                 recipe.user, recipe.channel)
+    return builds
+
+
+def _trigger_builds_for_package(session: database.Session, package: database.Package):
+
+    # Get all failed builds which are waiting a package of the same recipe revision. In these cases the package ID
+    # should match exactly.
+    same_recipe_revision = session.query(database.Build).filter(database.Build.status == database.BuildStatus.error).\
+        filter(database.missing_package.columns['build_id'] == database.Build.id).\
+        filter(database.missing_package.columns['package_id'] == package.id).\
+        filter(database.Build.commit_id == database.Commit.id).\
+        filter(database.Commit.status == database.CommitStatus.building).\
+        all()
+
+    # Get all failed builds which are waiting for a package of the same recipe but a different recipe revision. In these
+    # cases a build is triggered regardless of the exact package ID (because the package ID might be computed
+    # differently for a different recipe revision).
+    different_recipe_revision = session.query(database.Build).\
+        filter(database.Build.status == database.BuildStatus.error).\
+        filter(database.missing_package.columns['build_id'] == database.Build.id).\
+        filter(database.missing_package.columns['package_id'] == database.Package.id).\
+        filter(database.Build.commit_id == database.Commit.id).\
+        filter(database.Commit.status == database.CommitStatus.building).\
+        filter(database.Package.recipe_revision_id == database.RecipeRevision.id).\
+        filter(database.RecipeRevision.revision != package.recipe_revision.revision).\
+        filter(database.RecipeRevision.recipe_id == package.recipe_revision.recipe.id).\
+        all()
+
+    # re-trigger these builds
+    builds = same_recipe_revision + different_recipe_revision
+    for build in builds:
+        logger.info("Set status of build '%d' to 'new'", build.id)
+        build.status = database.BuildStatus.new
+
+    logger.debug("Trigger builds for package '%s' (ID: '%s')", package.id, package.package_id)
+    return builds
+
+
+def process_success(build_id, build_output) -> dict:
+    result = dict()
+
     try:
         data = json.loads(build_output["create"])
     except KeyError:
         logger.error("Failed to obtain JSON output of the Conan create stage for build '%d'", build_id)
-        return
+        return result
 
     with database.session_scope() as session:
         build = session.query(database.Build).filter_by(id=build_id).first()
@@ -100,21 +155,30 @@ def process_success(build_id, build_output):
             recipe_revision = _process_recipe_revision(session, recipe_data, build.profile.ecosystem)
             if not recipe_revision:
                 continue
+
             for package_data in recipe_compound["packages"]:
                 package = _process_package(session, package_data, recipe_revision)
                 if not package:
                     continue
                 build.package = package
 
+                if _trigger_builds_for_package(session, package):
+                    result['new_builds'] = True
+
+            if _trigger_builds_for_recipe(session, recipe_revision.recipe):
+                result['new_builds'] = True
+
         logger.info("Updated database for the successful build '%d'", build_id)
+        return result
 
 
-def process_failure(build_id, build_output):
+def process_failure(build_id, build_output) -> dict:
+    result = dict()
     try:
         data = json.loads(build_output["create"])
     except KeyError:
         logger.info("Failed build contains no JSON output of the Conan create stage")
-        return
+        return result
 
     if not data["error"]:
         logger.info("Conan create for failed build '%d' was successful, no missing dependencies", build_id)
@@ -144,3 +208,4 @@ def process_failure(build_id, build_output):
                     build.missing_packages.append(package)
 
         logger.info("Updated database for the failed build '%d'", build_id)
+        return result

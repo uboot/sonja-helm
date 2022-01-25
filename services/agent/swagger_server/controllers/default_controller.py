@@ -1,10 +1,8 @@
-import connexion
-import six
-
 from sonja.agent import Agent
 from sonja.config import app
+from sonja.client import scheduler
 
-agent = Agent()
+agent = Agent(scheduler)
 logger = app.app.logger
 
 

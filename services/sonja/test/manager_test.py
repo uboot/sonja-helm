@@ -18,6 +18,23 @@ def _setup_build_output(create_file="create.json"):
     return build_output
 
 
+def _create_waiting_build(session, ecosystem, missing_packages=[], missing_recipes=[]):
+    build = util.create_build({"ecosystem": ecosystem})
+    build.status = database.BuildStatus.error
+    build.missing_packages = missing_packages
+    build.missing_recipes = missing_recipes
+    session.add(build)
+    session.commit()
+    return build.id
+
+
+def _create_build(session, ecosystem):
+    build = util.create_build({"ecosystem": ecosystem})
+    session.add(build)
+    session.commit()
+    return build.id
+
+
 class ManagerTest(unittest.TestCase):
     def setUp(self):
         database.reset_database()
@@ -31,7 +48,9 @@ class ManagerTest(unittest.TestCase):
             session.commit()
             build_id = build.id
 
-        manager.process_success(build_id, build_output)
+        result = manager.process_success(build_id, build_output)
+
+        self.assertFalse("new_builds" in result.keys())
 
         with database.session_scope() as session:
             build = session.query(database.Build).filter_by(id=build_id).first()
@@ -132,6 +151,24 @@ class ManagerTest(unittest.TestCase):
             self.assertEqual("mycompany", recipe.user)
             self.assertEqual("stable", recipe.channel)
 
+    def test_process_failure_missing_package_no_revision(self):
+        build_output = _setup_build_output("create_missing_package_no_revision.json")
+
+        with database.session_scope() as session:
+            build = util.create_build(dict())
+            session.add(build)
+            session.commit()
+            build_id = build.id
+
+        manager.process_failure(build_id, build_output)
+
+        with database.session_scope() as session:
+            build = session.query(database.Build).filter_by(id=build_id).first()
+            self.assertEqual(1, len(build.missing_packages))
+            recipe_revision = build.missing_packages[0].recipe_revision
+            self.assertIsNotNone(recipe_revision)
+            self.assertEqual("", recipe_revision.revision)
+
     def test_process_failure_missing_package_twice(self):
         build_output_missing_package = _setup_build_output("create_missing_package.json")
         build_output_missing_recipe = _setup_build_output("create_missing_recipe.json")
@@ -187,3 +224,96 @@ class ManagerTest(unittest.TestCase):
             build = session.query(database.Build).filter_by(id=build_id).first()
             self.assertEqual(0, len(build.missing_recipes))
             self.assertEqual(0, len(build.missing_packages))
+
+    def test_process_success_waiting_for_recipe(self):
+        build_output = _setup_build_output("create.json")
+
+        with database.session_scope() as session:
+            ecosystem = util.create_ecosystem(dict())
+            waiting_build_id = _create_waiting_build(session, ecosystem,
+                                                     missing_recipes=[util.create_recipe({"ecosystem": ecosystem})])
+            build_id = _create_build(session, ecosystem)
+
+        result = manager.process_success(build_id, build_output)
+
+        self.assertTrue(result["new_builds"])
+
+        with database.session_scope() as session:
+            waiting_build = session.query(database.Build).filter_by(id=waiting_build_id).first()
+            self.assertEqual(database.BuildStatus.new, waiting_build.status)
+
+    def test_process_success_waiting_for_package(self):
+        build_output = _setup_build_output("create.json")
+        with database.session_scope() as session:
+            ecosystem = util.create_ecosystem(dict())
+            waiting_build_id = _create_waiting_build(session, ecosystem,
+                                                     missing_packages=[util.create_package({"ecosystem": ecosystem})])
+            build_id = _create_build(session, ecosystem)
+
+        result = manager.process_success(build_id, build_output)
+
+        self.assertTrue(result["new_builds"])
+
+        with database.session_scope() as session:
+            waiting_build = session.query(database.Build).filter_by(id=waiting_build_id).first()
+            self.assertEqual(database.BuildStatus.new, waiting_build.status)
+
+    def test_process_success_waiting_for_package_no_revision(self):
+        build_output = _setup_build_output("create.json")
+        with database.session_scope() as session:
+            ecosystem = util.create_ecosystem(dict())
+            waiting_build_id = _create_waiting_build(session, ecosystem, missing_packages=[util.create_package(
+                {
+                    "ecosystem": ecosystem,
+                    "recipe_revision.revision": ""
+                })
+            ])
+            build_id = _create_build(session, ecosystem)
+
+        result = manager.process_success(build_id, build_output)
+
+        self.assertTrue(result["new_builds"])
+
+        with database.session_scope() as session:
+            waiting_build = session.query(database.Build).filter_by(id=waiting_build_id).first()
+            self.assertEqual(database.BuildStatus.new, waiting_build.status)
+
+    def test_process_success_waiting_for_package_different_revision(self):
+        build_output = _setup_build_output("create.json")
+        with database.session_scope() as session:
+            ecosystem = util.create_ecosystem(dict())
+            waiting_build_id = _create_waiting_build(session, ecosystem, missing_packages=[util.create_package(
+                {
+                    "ecosystem": ecosystem,
+                    "recipe_revision.revision": "f5c1ba6f1af634f500f7e0255619fecf4777965f"
+                })
+            ])
+            build_id = _create_build(session, ecosystem)
+
+        result = manager.process_success(build_id, build_output)
+
+        self.assertTrue(result["new_builds"])
+
+        with database.session_scope() as session:
+            waiting_build = session.query(database.Build).filter_by(id=waiting_build_id).first()
+            self.assertEqual(database.BuildStatus.new, waiting_build.status)
+
+    def test_process_success_waiting_for_package_different_package_id(self):
+        build_output = _setup_build_output("create.json")
+        with database.session_scope() as session:
+            ecosystem = util.create_ecosystem(dict())
+            waiting_build_id = _create_waiting_build(session, ecosystem, missing_packages=[util.create_package(
+                {
+                    "ecosystem": ecosystem,
+                    "package.package_id": "d057732059ea44a47760900cb5e4855d2bea8714"
+                })
+            ])
+            build_id = _create_build(session, ecosystem)
+
+        result = manager.process_success(build_id, build_output)
+
+        self.assertFalse("new_builds" in result.keys())
+
+        with database.session_scope() as session:
+            waiting_build = session.query(database.Build).filter_by(id=waiting_build_id).first()
+            self.assertEqual(database.BuildStatus.error, waiting_build.status)

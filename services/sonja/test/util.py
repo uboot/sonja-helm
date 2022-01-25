@@ -159,13 +159,13 @@ def create_recipe_revision(parameters):
     recipe = create_recipe(parameters)
     recipe_revision = database.RecipeRevision()
     recipe_revision.recipe = recipe
-    recipe_revision.revision = "2b44d2dde63878dd279ebe5d38c60dfaa97153fb"
+    recipe_revision.revision = parameters.get("recipe_revision.revision", "2b44d2dde63878dd279ebe5d38c60dfaa97153fb")
     return recipe_revision
 
 
 def create_package(parameters):
     recipe_revision = create_recipe_revision(parameters)
     package = database.Package()
-    package.package_id = "227220812d7ea3aa060187bae41abbc9911dfdfd"
+    package.package_id = parameters.get("package.package_id", "227220812d7ea3aa060187bae41abbc9911dfdfd")
     package.recipe_revision = recipe_revision
     return package

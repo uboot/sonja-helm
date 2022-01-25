@@ -1,4 +1,5 @@
 from sonja import database, manager
+from sonja.client import ApiException, MaxRetryError
 from sonja.builder import Builder
 from sonja.config import connect_to_database, logger
 from sonja.worker import Worker
@@ -18,10 +19,11 @@ async def _run_build(builder, parameters):
 
 
 class Agent(Worker):
-    def __init__(self):
+    def __init__(self, scheduler):
         super().__init__()
         connect_to_database()
         self.__build_id = None
+        self.__scheduler = scheduler
 
     async def work(self):
         new_builds = True
@@ -105,13 +107,16 @@ class Agent(Worker):
                         return True
 
                 logger.info("Process build output")
-                manager.process_success(self.__build_id, builder.build_output)
+                result = manager.process_success(self.__build_id, builder.build_output)
+                if result.get("new_builds", False):
+                    self.__trigger_scheduler()
 
                 logger.info("Set status of build '%d' to 'success'", self.__build_id)
                 self.__set_build_status(database.BuildStatus.success)
+
                 self.__build_id = None
         except Exception as e:
-            logger.error(e)
+            logger.info(e)
             manager.process_failure(self.__build_id, builder.build_output)
             logger.info("Set status of build '%d' to 'error'", self.__build_id)
             self.__set_build_status(database.BuildStatus.error)
@@ -171,3 +176,9 @@ class Agent(Worker):
             self.__build_id = None
             return True
 
+    def __trigger_scheduler(self):
+        logger.info('Trigger scheduler: process commits')
+        try:
+            self.__scheduler.process_commits()
+        except (ApiException, MaxRetryError):
+            logger.error("Failed to trigger scheduler")

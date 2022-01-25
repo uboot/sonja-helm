@@ -243,10 +243,8 @@ class Build(Base):
     profile = relationship("Profile")
     log_id = Column(Integer, ForeignKey('log.id'), nullable=False)
     log = relationship("Log")
-    missing_packages = relationship("Package", secondary=missing_package,
-                                    backref="waiting_builds")
-    missing_recipes = relationship("Recipe", secondary=missing_recipe,
-                                    backref="waiting_builds")
+    missing_packages = relationship("Package", secondary=missing_package)
+    missing_recipes = relationship("Recipe", secondary=missing_recipe)
 
 
 class Log(Base):
