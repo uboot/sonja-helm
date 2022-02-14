@@ -14,7 +14,7 @@ import unittest
 # docker run --rm -d --name mysql -p 3306:3306 -e MYSQL_DATABASE=sonja -e MYSQL_ROOT_PASSWORD=secret mysql:8.0.21
 
 
-class AgentTest(unittest.TestCase):
+class TestAgent(unittest.TestCase):
     def setUp(self):
         self.scheduler = Mock()
         self.scheduler = Agent(self.scheduler)
@@ -94,7 +94,7 @@ class AgentTest(unittest.TestCase):
         self.assertEquals(self.__wait_for_build_status(database.BuildStatus.new, 15), database.BuildStatus.new)
 
 
-class CrawlerTest(unittest.TestCase):
+class TestCrawler(unittest.TestCase):
     def setUp(self):
         self.scheduler = Mock()
         self.crawler = Crawler(self.scheduler)
@@ -207,7 +207,7 @@ class CrawlerTest(unittest.TestCase):
             self.assertEqual(len(commits), 0)
 
 
-class SchedulerTest(unittest.TestCase):
+class TestScheduler(unittest.TestCase):
     def setUp(self):
         self.linux_agent = Mock()
         self.windows_agent = Mock()

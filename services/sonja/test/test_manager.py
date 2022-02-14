@@ -35,7 +35,7 @@ def _create_build(session, ecosystem):
     return build.id
 
 
-class ManagerTest(unittest.TestCase):
+class TestManager(unittest.TestCase):
     def setUp(self):
         database.reset_database()
 

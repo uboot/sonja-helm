@@ -13,7 +13,7 @@ known_hosts = ("Z2l0aHViLmNvbSwxNDAuODIuMTIxLjQgc3NoLXJzYSBBQUFBQjNOemFDMXljMkVB
                "lRKdmRzakUzSkVBdkdxM2xHSFNaWHkyOEczc2t1YTJTbVZpL3c0eUNFNmdiT0RxblRXbGc3K3dDNjA0eWRHWE"
                "E4VkppUzVhcDQzSlhpVUZGQWFRPT0K")
 
-class RepoControllerTest(unittest.TestCase):
+class TestRepoController(unittest.TestCase):
     def setUp(self):
         self.work_dir = os.environ.get("VCS_DATA_DIR", ".")
         shutil.rmtree(self.work_dir)

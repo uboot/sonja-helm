@@ -4,7 +4,7 @@ from sonja import database
 from sonja.test import util
 
 
-class DatabaseTest(unittest.TestCase):
+class TestDatabase(unittest.TestCase):
     def setUp(self):
         database.reset_database()
 

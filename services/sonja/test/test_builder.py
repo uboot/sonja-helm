@@ -83,7 +83,7 @@ def get_build_parameters(profile, https=False):
     }
 
 
-class BuilderTest(unittest.TestCase):
+class TestBuilder(unittest.TestCase):
     def test_run_linux(self):
         docker_host = os.environ.get("LINUX_DOCKER_HOST", "")
         parameters = get_build_parameters("linux-debug")

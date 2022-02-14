@@ -3,7 +3,7 @@ import unittest
 from sonja import ssh
 
 
-class SshTest(unittest.TestCase):
+class TestSsh(unittest.TestCase):
     def test_generate_rsa_key(self):
         private, public = ssh.generate_rsa_key()
         self.assertTrue(private.startswith("-----BEGIN RSA PRIVATE KEY-----"))
