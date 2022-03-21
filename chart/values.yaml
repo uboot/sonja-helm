@@ -24,9 +24,6 @@ services:
   - name: scheduler
   - name: crawler
   - name: frontend
-  - name: linux-agent
-    docker: true
-    image: agent
 
 linux:
   replicas: 1

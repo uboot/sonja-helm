@@ -6,11 +6,7 @@ metadata:
   labels:
     app: {{ template "sonja.fullname" $ }}-{{ .name }}
 spec:
-{{- if .docker }}
-  replicas: {{ $.Values.linux.replicas | default 1 }}
-{{- else }}
   replicas: 1
-{{- end }}
   selector:
     matchLabels:
       app: {{ template "sonja.fullname" $ }}-{{ .name }}
@@ -21,11 +17,7 @@ spec:
     spec:
       containers:
       - name:  {{ .name }}
-{{- if .image }}
-        image: uboot/sonja-{{ .image }}:latest
-{{- else }}
         image: uboot/sonja-{{ .name }}:latest
-{{- end }}
         livenessProbe:
           httpGet:
             path: {{ .pingUrl | default "/ping" }}
@@ -54,15 +46,57 @@ spec:
           value: {{ $.Values.auth.password }}
         - name: SONJA_SECRET_KEY
           value: {{ $.Values.auth.secretKey }}
-{{- if .password }}
-        - name: PASSWORD
-          value: {{ .password }}
+---
 {{- end }}
-{{- if .docker }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "sonja.fullname" $ }}-linux-agent
+  labels:
+    app: {{ template "sonja.fullname" $ }}-linux-agent
+spec:
+  replicas: {{ $.Values.linux.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ template "sonja.fullname" $ }}-linux-agent
+  template:
+    metadata:
+      labels:
+        app: {{ template "sonja.fullname" $ }}-linux-agent
+    spec:
+      containers:
+      - name:  linux-agent
+        image: uboot/sonja-agent:latest
+        livenessProbe:
+          httpGet:
+            path: {{ .pingUrl | default "/ping" }}
+            port: 8080
+          initialDelaySeconds: 300
+        env:
+        - name: MYSQL_URL
+          value: {{ $.Release.Name }}-mysql
+        - name: MYSQL_ROOT_PASSWORD
+          value: {{ $.Values.mysql.auth.rootPassword }}
+        - name: SONJA_AGENT_OS
+          value: Linux
+        - name: SONJA_MTU
+          value: "{{ $.Values.mtu | default 1500 }}"
+        - name: SONJA_CRAWLER_URL
+          value: {{ template "sonja.fullname" $ }}-crawler
+        - name: SONJA_SCHEDULER_URL
+          value: {{ template "sonja.fullname" $ }}-scheduler
+        - name: SONJA_LINUXAGENT_URL
+          value: {{ template "sonja.fullname" $ }}-linux-agent
+        - name: SONJA_WINDOWSAGENT_URL
+          value: {{ template "sonja.fullname" $ }}-windows-agent
+        - name: SONJA_INITIAL_USER
+          value: {{ $.Values.auth.user }}
+        - name: SONJA_INITIAL_PASSWORD
+          value: {{ $.Values.auth.password }}
+        - name: SONJA_SECRET_KEY
+          value: {{ $.Values.auth.secretKey }}
         - name: DOCKER_HOST
           value: 127.0.0.1:2375
-{{- end }}
-{{- if .docker }}
       - name: docker
         image: docker:19.03.12-dind
         command: 
@@ -77,9 +111,7 @@ spec:
         - "tcp://"
         securityContext:
           privileged: true
-{{- end }}
 ---
-{{- end }}
 {{- range untilStep 0 (int .Values.windows.replicas) 1 }}
 apiVersion: apps/v1
 kind: Deployment
