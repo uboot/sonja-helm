@@ -1,4 +1,0 @@
-sources:
-  "1.2.3":
-    url: "https://github.com/conan-io/hello.git"
-    branch: "master"
