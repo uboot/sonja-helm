@@ -2,21 +2,31 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-hostName: sonja
+## @section Ingress
 
-mysql:
-  auth:
-    rootPassword: secret
-    database: sonja
+## @param ingress.enabled Enable ingress
+## @param ingress.hostName Host name
 
-mtu: 1450
-insecureRegistries: []
+## @section Authentification
 
-auth:
-  # openssl rand -hex 32
-  secretKey: 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
-  user: user
-  password: paSSw0rd
+## @param auth.secretKey Secret key for authorization tokens
+## @param auth.user Name of the initial user
+## @param auth.password Password of initial user
+
+## @section Agents
+
+## @param linux.replicas Number of Linux docker agents
+## @param windows.image Docker image which contains a virtual disk with an installed Windows system
+## @param windows.replicas Number of Windows docker agents
+
+## @section Docker
+
+## @param mtu MTU of the build (docker) containers
+## @param insecureRegistries List of insecure docker registries
+
+## @section Mysql
+
+## @param mysql.auth.rootPassword Database password
 
 services:
   - name: public
@@ -25,9 +35,30 @@ services:
   - name: crawler
   - name: frontend
 
+ingress:
+  enabled: true
+  hostName: sonja
+
+mysql:
+  auth:
+    rootPassword: secret
+    database: sonja
+
+auth:
+  # openssl rand -hex 32
+  secretKey: 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+  user: user
+  password: paSSw0rd
+
+mtu: 1450
+insecureRegistries: []
+
 linux:
   replicas: 1
 
 windows:
-  image: localhost:5000/windows20h2:latest
-  replicas: 1
+  image: registry:5000/windows20h2:latest
+  replicas: 0
+
+## @skip mysql.auth.database
+## @skip services
