@@ -12,10 +12,10 @@ contrast, Sonja is designed with a very specific setting in mind:
   in Git repositories to be processed by Sonja.
 - Sonja runs builds inside Docker containers exclusively. No "build machines"
   (VMs or bare-metal) are supported.
-- Sonja has to be hosted on a Kubernetes cluster. One of the component of the
-  Sonja deployment is the "agent" service. The build capacity of a Sonja
-  installation can be scaled by changing the number of deployments ("replicas")
-  of the "agent" service.
+- Sonja has to be hosted on a Kubernetes cluster. One component of the Sonja
+  deployment is the "agent" service. The build capacity of a Sonja installation
+  can be scaled by changing the number of deployments ("replicas") of the
+  "agent" service.
 
 Because Sonja "knows" that it builds Conan packages the process of setting up
 new builds is very simple. The CI is also able to "understand" the build output
