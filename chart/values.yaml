@@ -13,6 +13,9 @@
 ## @param auth.user Name of the initial user
 ## @param auth.password Password of initial user
 
+## @section Initial Setup
+## @param initialEcosystem Name of the initial ecosystem with demo data
+
 ## @section Agents
 
 ## @param linux.replicas Number of Linux docker agents
@@ -52,6 +55,7 @@ auth:
 
 mtu: 1450
 insecureRegistries: []
+initialEcosystem: MyEcosystem
 
 linux:
   replicas: 1

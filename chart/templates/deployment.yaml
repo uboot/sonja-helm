@@ -28,10 +28,6 @@ spec:
           value: {{ $.Release.Name }}-mysql
         - name: MYSQL_ROOT_PASSWORD
           value: {{ $.Values.mysql.auth.rootPassword }}
-        - name: SONJA_AGENT_OS
-          value: Linux
-        - name: SONJA_MTU
-          value: "{{ $.Values.mtu | default 1500 }}"
         - name: SONJA_CRAWLER_URL
           value: {{ template "sonja.fullname" $ }}-crawler
         - name: SONJA_SCHEDULER_URL
@@ -44,6 +40,8 @@ spec:
           value: {{ $.Values.auth.user }}
         - name: SONJA_INITIAL_PASSWORD
           value: {{ $.Values.auth.password }}
+        - name: SONJA_INITIAL_ECOSYSTEM
+          value: {{ $.Values.initialEcosystem }}
         - name: SONJA_SECRET_KEY
           value: {{ $.Values.auth.secretKey }}
 ---
@@ -77,24 +75,12 @@ spec:
           value: {{ $.Release.Name }}-mysql
         - name: MYSQL_ROOT_PASSWORD
           value: {{ $.Values.mysql.auth.rootPassword }}
+        - name: SONJA_SCHEDULER_URL
+          value: {{ template "sonja.fullname" $ }}-scheduler
         - name: SONJA_AGENT_OS
           value: Linux
         - name: SONJA_MTU
           value: "{{ $.Values.mtu | default 1500 }}"
-        - name: SONJA_CRAWLER_URL
-          value: {{ template "sonja.fullname" $ }}-crawler
-        - name: SONJA_SCHEDULER_URL
-          value: {{ template "sonja.fullname" $ }}-scheduler
-        - name: SONJA_LINUXAGENT_URL
-          value: {{ template "sonja.fullname" $ }}-linux-agent
-        - name: SONJA_WINDOWSAGENT_URL
-          value: {{ template "sonja.fullname" $ }}-windows-agent
-        - name: SONJA_INITIAL_USER
-          value: {{ $.Values.auth.user }}
-        - name: SONJA_INITIAL_PASSWORD
-          value: {{ $.Values.auth.password }}
-        - name: SONJA_SECRET_KEY
-          value: {{ $.Values.auth.secretKey }}
         - name: DOCKER_HOST
           value: 127.0.0.1:2375
       - name: docker
@@ -144,18 +130,12 @@ spec:
           value: {{ $.Release.Name }}-mysql
         - name: MYSQL_ROOT_PASSWORD
           value: {{ $.Values.mysql.auth.rootPassword }}
+        - name: SONJA_SCHEDULER_URL
+          value: {{ template "sonja.fullname" $ }}-scheduler
         - name: SONJA_AGENT_OS
           value: Windows
         - name: SONJA_MTU
           value: "{{ $.Values.mtu | default 1500 }}"
-        - name: SONJA_CRAWLER_URL
-          value: {{ template "sonja.fullname" $ }}-crawler
-        - name: SONJA_SCHEDULER_URL
-          value: {{ template "sonja.fullname" $ }}-scheduler
-        - name: SONJA_LINUXAGENT_URL
-          value: {{ template "sonja.fullname" $ }}-linux-agent
-        - name: SONJA_WINDOWSAGENT_URL
-          value: {{ template "sonja.fullname" $ }}-windows-agent
         - name: DOCKER_HOST
           value: {{ template "sonja.fullname" $ }}-windows-docker-{{ . }}:2375
 ---

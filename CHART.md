@@ -52,6 +52,13 @@ When a Sonja release is installed for the first time an empty database is
 initialized and one initial admin user is automatically created. The name and
 password of this user can be provided as chart parameters.
 
+## Initial Setup
+
+You can provide the name of an initial ecosystem as a chart value. In this case
+an ecosystem is created when the Sonja database is initialized the first time.
+The ecosystem will contain some sample data which serves as a starting point for
+first experiments with Sonja.
+
 ## Agents
 
 Sonja requires at least one agent which uses a Docker-in-Docker approach to run
@@ -114,6 +121,13 @@ registries.
 | `auth.secretKey` | Secret key for authorization tokens | `1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef` |
 | `auth.user`      | Name of the initial user            | `user`                                                             |
 | `auth.password`  | Password of initial user            | `paSSw0rd`                                                         |
+
+
+### Initial Setup
+
+| Name               | Description                                  | Value         |
+| ------------------ | -------------------------------------------- | ------------- |
+| `initialEcosystem` | Name of the initial ecosystem with demo data | `MyEcosystem` |
 
 
 ### Agents
