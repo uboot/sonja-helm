@@ -62,7 +62,7 @@ and can implement additional functionality on top of it:
 
 ## Try it
 
-This reposiWebtory contains a [Helm](https://helm.sh/) chart which installs the
+This repository contains a [Helm](https://helm.sh/) chart which installs the
 latest version of Sonja on a Kubernetes cluster. More information is available
 in [CHART.md](CHART.md).
 
