@@ -106,6 +106,13 @@ registries.
 
 ## Parameters
 
+### General
+
+| Name      | Description                                   | Value    |
+| --------- | --------------------------------------------- | -------- |
+| `channel` | Use the `stable` or `latest` version of Sonja | `stable` |
+
+
 ### Ingress
 
 | Name               | Description    | Value   |
