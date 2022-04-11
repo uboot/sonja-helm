@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name:  {{ .name }}
-        image: uboot/sonja-{{ .name }}:latest
+        image: uboot/sonja-{{ .name }}:{{ $.Values.channel }}
         livenessProbe:
           httpGet:
             path: {{ .pingUrl | default "/ping" }}
@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
       - name:  linux-agent
-        image: uboot/sonja-agent:latest
+        image: uboot/sonja-agent:{{ $.Values.channel }}
         livenessProbe:
           httpGet:
             path: {{ .pingUrl | default "/ping" }}
@@ -119,7 +119,7 @@ spec:
     spec:
       containers:
       - name:  windows-agent
-        image: uboot/sonja-agent:latest
+        image: uboot/sonja-agent:{{ $.Values.channel }}
         livenessProbe:
           httpGet:
             path: /ping
