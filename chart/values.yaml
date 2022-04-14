@@ -51,6 +51,11 @@ mysql:
     rootPassword: secret
     database: sonja
 
+redis:
+ architecture: standalone
+ auth:
+  enabled: false
+
 auth:
   # openssl rand -hex 32
   secretKey: 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
