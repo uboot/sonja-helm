@@ -66,6 +66,8 @@ sudo az aks install-cli
 Install Ingress
 ===============
 
+Cf. also https://docs.microsoft.com/en-us/azure/aks/ingress-static-ip?tabs=azure-cli
+
 az network public-ip create \
   --resource-group mc_cluster_cluster_westeurope \
   --name ip \
@@ -73,6 +75,9 @@ az network public-ip create \
   --allocation-method static \
   --dns-name $CLUSTER \
   --query publicIp.ipAddress -o tsv
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
 
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \

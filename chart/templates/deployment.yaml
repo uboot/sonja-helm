@@ -28,6 +28,8 @@ spec:
           value: {{ $.Release.Name }}-mysql
         - name: MYSQL_ROOT_PASSWORD
           value: {{ $.Values.mysql.auth.rootPassword }}
+        - name: REDIS_HOST
+          value: {{ $.Release.Name }}-redis-master
         - name: SONJA_CRAWLER_URL
           value: {{ template "sonja.fullname" $ }}-crawler
         - name: SONJA_SCHEDULER_URL
@@ -75,6 +77,8 @@ spec:
           value: {{ $.Release.Name }}-mysql
         - name: MYSQL_ROOT_PASSWORD
           value: {{ $.Values.mysql.auth.rootPassword }}
+        - name: REDIS_HOST
+          value: {{ $.Release.Name }}-redis-master
         - name: SONJA_SCHEDULER_URL
           value: {{ template "sonja.fullname" $ }}-scheduler
         - name: SONJA_AGENT_OS
@@ -130,6 +134,8 @@ spec:
           value: {{ $.Release.Name }}-mysql
         - name: MYSQL_ROOT_PASSWORD
           value: {{ $.Values.mysql.auth.rootPassword }}
+        - name: REDIS_HOST
+          value: {{ $.Release.Name }}-redis-master
         - name: SONJA_SCHEDULER_URL
           value: {{ template "sonja.fullname" $ }}-scheduler
         - name: SONJA_AGENT_OS
