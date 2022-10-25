@@ -13,6 +13,16 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
+  name: {{ template "sonja.fullname" $ }}-frontend
+spec:
+  selector:
+    app: {{ template "sonja.fullname" $ }}-frontend
+  ports:
+    - port: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
   name: {{ template "sonja.fullname" $ }}-linux-agent
 spec:
   selector:

@@ -40,7 +40,7 @@ services:
     pingUrl: /api/v1/ping
   - name: scheduler
   - name: crawler
-  - name: frontend
+  - name: watchdog
 
 ingress:
   enabled: true
