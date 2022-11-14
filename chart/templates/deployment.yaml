@@ -119,7 +119,7 @@ spec:
         - name: DOCKER_HOST
           value: 127.0.0.1:2375
       - name: docker
-        image: docker:19.03.12-dind
+        image: docker:20.10.21-dind
         command: 
         - "dockerd"
         - "--mtu"
