@@ -39,7 +39,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=$CLUSTER \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
 
-export KUBEVIRT_VERSION=v0.52.0
+export KUBEVIRT_VERSION=v0.59.0
 echo "kubevirt version: $KUBEVIRT_VERSION"
 
 kubectl create namespace kubevirt
